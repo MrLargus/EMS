@@ -228,17 +228,17 @@ const interviewStructure = [
 const interviewRules = [
   {
     from: 0, to: 7, bg: '#f8d7da', color: '#721c24', emoji: '🔴',
-    label: 'Кандидат не допущен',
-    recommendation: 'Вы много чего забыли заполнить!'
+    label: 'Вы много чего забыли заполнить!',
+    recommendation: 'Перепроверьте чек-лист.'
   },
   {
     from: 8, to: 10, bg: '#fff3cd', color: '#856404', emoji: '⚠️',
-    label: 'Требуется дополнительная проверка',
-    recommendation: 'Вы немного не заполнели чек лист, не забудьте потом донести до интерна недостающую информацию'
+    label: 'Вы немного не заполнели чек лист',
+    recommendation: 'Не забудьте потом донести до интерна недостающую информацию'
   },
   {
     from: 11, to: 999, bg: '#d4edda', color: '#155724', emoji: '✅',
-    label: 'Кандидат допущен',
-    recommendation: 'Всё отлично, вы молодец!'
+    label: 'Всё отлично',
+    recommendation: 'Вы молодец!'
   }
 ];
