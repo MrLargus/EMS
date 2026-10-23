@@ -2,217 +2,382 @@ let currentInterviewResult = null;
 let selectedQuizQuestions = [];
 let quizSectionElement = null;
 
-function openInterviewTest() {
-  document.getElementById('startScreen').style.display = 'none';
-  document.getElementById('checklistWrapper').style.display = 'none';
-  document.getElementById('interviewWrapper').style.display = 'block';
+let extraQuestionsAdded = 0;
+let medicalQuestionsAdded = 0;
 
-  buildInterviewQuiz();
-  window.scrollTo(0, 0);
+const MAX_EXTRA_QUESTIONS = 3;
+const MAX_MEDICAL_QUESTIONS = 3;
+const MAIN_QUESTIONS_COUNT = 5;
+const FIXED_FIRST_INDEX = 0; // Индекс фиксированного первого вопроса в riddleQuestions
+
+function openInterviewTest() {
+    document.getElementById('startScreen').style.display = 'none';
+    document.getElementById('checklistWrapper').style.display = 'none';
+    document.getElementById('interviewWrapper').style.display = 'block';
+
+    buildInterviewQuiz();
+    window.scrollTo(0, 0);
 }
 
 function buildInterviewQuiz() {
-  const form = document.getElementById('interviewQuiz');
-  form.innerHTML = '';
-  quizSectionElement = null;
+    const form = document.getElementById('interviewQuiz');
+    form.innerHTML = '';
+    quizSectionElement = null;
+    extraQuestionsAdded = 0;
+    medicalQuestionsAdded = 0;
 
-  selectedQuizQuestions = pickQuestionsFromEachBlock(riddleQuestions);
+    // === Основные 5 вопросов ===
+    selectedQuizQuestions = buildMainQuestions();
 
-  interviewStructure.forEach((section, si) => {
-    const blockTitle = document.createElement('div');
-    blockTitle.className = 'block-title';
-    blockTitle.textContent = section.block;
-    form.appendChild(blockTitle);
+    interviewStructure.forEach((section, si) => {
+        const blockTitle = document.createElement('div');
+        blockTitle.className = 'block-title';
+        blockTitle.textContent = section.block;
+        form.appendChild(blockTitle);
 
-    if (section.type === 'checklist') {
-      section.items.forEach((item, ii) => {
-        const label = document.createElement('label');
-        label.className = 'answer';
-        label.style.display = 'flex';
-        label.style.alignItems = 'flex-start';
-        label.style.gap = '12px';
-        label.style.margin = '8px 0';
-        label.style.padding = '14px';
-        label.style.background = '#f8fafc';
-        label.style.border = '1px solid #dce1e6';
-        label.style.borderRadius = '4px';
-        label.style.cursor = 'pointer';
-        label.innerHTML = `
+        if (section.type === 'checklist') {
+            section.items.forEach((item, ii) => {
+                const label = document.createElement('label');
+                label.className = 'answer';
+                label.style.display = 'flex';
+                label.style.alignItems = 'flex-start';
+                label.style.gap = '12px';
+                label.style.margin = '8px 0';
+                label.style.padding = '14px';
+                label.style.background = '#f8fafc';
+                label.style.border = '1px solid #dce1e6';
+                label.style.borderRadius = '4px';
+                label.style.cursor = 'pointer';
+                label.innerHTML = `
           <input type="checkbox" name="chk_${si}_${ii}" style="width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; accent-color: #1a3a6c;">
           <span>${item}</span>
         `;
-        form.appendChild(label);
-      });
-    } else if (section.type === 'quiz') {
-      const quizContainer = document.createElement('div');
-      quizContainer.className = 'quiz-questions-container';
+                form.appendChild(label);
+            });
+        } else if (section.type === 'quiz') {
+            const quizContainer = document.createElement('div');
+            quizContainer.className = 'quiz-questions-container';
+            quizContainer.id = 'quizQuestionsContainer';
 
-      selectedQuizQuestions.forEach((q, qi) => {
-        const div = document.createElement('div');
-        div.className = 'question';
-        let html = `<h3>${qi + 1}. ${q.text}</h3>`;
-        q.answers.forEach((a, ai) => {
-          html += `<label class="answer">
-            <input type="radio" name="quiz_${qi}" value="${ai}" style="width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; accent-color: #1a3a6c;">
-            <span>${a}</span>
-          </label>`;
-        });
-        div.innerHTML = html;
-        quizContainer.appendChild(div);
-      });
+            selectedQuizQuestions.forEach((q, qi) => {
+                quizContainer.appendChild(createQuestionElement(q, qi));
+            });
 
-      form.appendChild(quizContainer);
-      quizSectionElement = quizContainer;
+            form.appendChild(quizContainer);
+            quizSectionElement = quizContainer;
 
-      const quizCheckBlock = document.createElement('div');
-      quizCheckBlock.style.marginTop = '15px';
-      quizCheckBlock.style.marginBottom = '25px';
-      quizCheckBlock.innerHTML = `
+            const quizCheckBlock = document.createElement('div');
+            quizCheckBlock.style.marginTop = '15px';
+            quizCheckBlock.style.marginBottom = '25px';
+            quizCheckBlock.innerHTML = `
         <button type="button" class="gen-btn" onclick="checkQuizOnly()" style="margin-top: 0;">
           ✔️ Проверить вопросы
         </button>
+        <div class="quiz-action-row" style="display: none; margin-top: 10px; gap: 10px; flex-direction: row; flex-wrap: wrap;">
+          <button type="button" class="gen-btn" id="extraQuestionBtn" onclick="addExtraQuestion()" style="margin-top: 0; display: none; flex: 1; min-width: 200px;">
+            ➕ Дополнительный вопрос
+          </button>
+          <button type="button" class="gen-btn" id="medicalQuestionBtn" onclick="addMedicalQuestion()" style="margin-top: 0; display: none; flex: 1; min-width: 200px;">
+            🩺 Вопрос на знание медицины
+          </button>
+        </div>
         <div id="quizResult" style="margin-top: 15px;"></div>
       `;
-      form.appendChild(quizCheckBlock);
-    }
-  });
+            form.appendChild(quizCheckBlock);
+        }
+    });
 }
 
-function pickQuestionsFromEachBlock(allQuestions) {
-  const groups = {};
-  allQuestions.forEach(q => {
-    const key = q.block || 'Без блока';
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(q);
-  });
+function createQuestionElement(q, index) {
+    const div = document.createElement('div');
+    div.className = 'question';
+    div.dataset.quizIndex = index;
+    let html = `<h3>${index + 1}. ${q.text}</h3>`;
+    q.answers.forEach((a, ai) => {
+        html += `<label class="answer">
+      <input type="radio" name="quiz_${index}" value="${ai}" style="width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; accent-color: #1a3a6c;">
+      <span>${a}</span>
+    </label>`;
+    });
+    div.innerHTML = html;
+    return div;
+}
 
-  const result = [];
-  Object.keys(groups).forEach(key => {
-    const arr = groups[key];
-    const randomIdx = Math.floor(Math.random() * arr.length);
-    result.push(arr[randomIdx]);
-  });
+// === Основные вопросы: 1 фикс + 4 рандом (не медицина) ===
+function buildMainQuestions() {
+    const result = [];
 
-  const shuffled = shuffleArray(result);
-  return shuffled.slice(0, 5);
+    // 1. Фиксированный первый вопрос
+    const fixedQuestion = riddleQuestions[FIXED_FIRST_INDEX];
+    result.push(fixedQuestion);
+    const usedIndices = new Set([FIXED_FIRST_INDEX]);
+
+    // 2. Группируем остальные вопросы по блокам, исключая медицину и уже использованный фикс
+    const groups = {};
+    riddleQuestions.forEach((q, i) => {
+        if (i === FIXED_FIRST_INDEX) return;              // уже использован
+        if (q.block.includes('Знание медицины')) return;  // медицину выносим отдельно
+        const key = q.block;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push({ q, idx: i });
+    });
+
+    // 3. Берём по одному случайному из каждого блока
+    Object.keys(groups).forEach(key => {
+        const arr = groups[key];
+        const pick = arr[Math.floor(Math.random() * arr.length)];
+        result.push(pick.q);
+        usedIndices.add(pick.idx);
+    });
+
+    // 4. Если получилось меньше 5 (например, блоков мало), добираем из остальных не-медицинских
+    if (result.length < MAIN_QUESTIONS_COUNT) {
+        const extraPool = riddleQuestions
+            .map((q, i) => ({ q, idx: i }))
+            .filter(item => !usedIndices.has(item.idx) && !item.q.block.includes('Знание медицины'));
+        const shuffled = shuffleArray(extraPool);
+        while (result.length < MAIN_QUESTIONS_COUNT && shuffled.length > 0) {
+            const pick = shuffled.pop();
+            result.push(pick.q);
+            usedIndices.add(pick.idx);
+        }
+    }
+
+    // 5. Перемешиваем вопросы начиная со 2-го (первый остаётся фиксированным)
+    const tail = result.slice(1);
+    const shuffledTail = shuffleArray(tail);
+    return [result[0], ...shuffledTail].slice(0, MAIN_QUESTIONS_COUNT);
+}
+
+// Возвращает Set индексов уже заданных вопросов (основные + доп)
+function getUsedQuestionIndices() {
+    const used = new Set();
+    selectedQuizQuestions.forEach(q => {
+        const idx = riddleQuestions.indexOf(q);
+        if (idx !== -1) used.add(idx);
+    });
+    return used;
+}
+
+// === Кнопка "Дополнительный вопрос" (не медицина) ===
+function addExtraQuestion() {
+    if (extraQuestionsAdded >= MAX_EXTRA_QUESTIONS) {
+        alert(`Больше ${MAX_EXTRA_QUESTIONS} дополнительных вопросов задавать нельзя.`);
+        return;
+    }
+
+    const usedIndices = getUsedQuestionIndices();
+    const availableIndices = riddleQuestions
+        .map((q, i) => ({ q, idx: i }))
+        .filter(item => !usedIndices.has(item.idx) && !item.q.block.includes('Знание медицины'))
+        .map(item => item.idx);
+
+    if (availableIndices.length === 0) {
+        alert('Все дополнительные вопросы (кроме медицины) уже заданы.');
+        return;
+    }
+
+    const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+    const newQuestion = riddleQuestions[randomIndex];
+    selectedQuizQuestions.push(newQuestion);
+    extraQuestionsAdded++;
+
+    appendQuestionToContainer(newQuestion, selectedQuizQuestions.length - 1);
+    updateExtraButtonsVisibility();
+}
+
+// === Кнопка "Вопрос на знание медицины" ===
+function addMedicalQuestion() {
+    if (medicalQuestionsAdded >= MAX_MEDICAL_QUESTIONS) {
+        alert(`Больше ${MAX_MEDICAL_QUESTIONS} медицинских вопросов задавать нельзя.`);
+        return;
+    }
+
+    const usedIndices = getUsedQuestionIndices();
+    const availableIndices = riddleQuestions
+        .map((q, i) => ({ q, idx: i }))
+        .filter(item => !usedIndices.has(item.idx) && item.q.block.includes('Знание медицины'))
+        .map(item => item.idx);
+
+    if (availableIndices.length === 0) {
+        alert('Все медицинские вопросы уже заданы.');
+        return;
+    }
+
+    const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+    const newQuestion = riddleQuestions[randomIndex];
+    selectedQuizQuestions.push(newQuestion);
+    medicalQuestionsAdded++;
+
+    appendQuestionToContainer(newQuestion, selectedQuizQuestions.length - 1);
+    updateExtraButtonsVisibility();
+}
+
+function appendQuestionToContainer(q, index) {
+    const quizContainer = document.getElementById('quizQuestionsContainer');
+    if (!quizContainer) return;
+    const el = createQuestionElement(q, index);
+    quizContainer.appendChild(el);
+    setTimeout(() => {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
+}
+
+// === Управление видимостью кнопок ===
+function updateExtraButtonsVisibility() {
+    const extraBtn = document.getElementById('extraQuestionBtn');
+    const medBtn = document.getElementById('medicalQuestionBtn');
+    const actionRow = document.querySelector('.quiz-action-row');
+    if (!extraBtn || !medBtn) return;
+
+    const correctCount = countCorrectQuizAnswers();
+    const percent = (Math.min(correctCount, MAIN_QUESTIONS_COUNT) / MAIN_QUESTIONS_COUNT) * 100;
+    const showAnyButton = percent < 80;
+
+    // Есть ли ещё не-медицинские вопросы
+    const usedIndices = getUsedQuestionIndices();
+    const hasExtra = riddleQuestions.some(
+        (q, i) => !usedIndices.has(i) && !q.block.includes('Знание медицины')
+    );
+    const hasMedical = riddleQuestions.some(
+        (q, i) => !usedIndices.has(i) && q.block.includes('Знание медицины')
+    );
+
+    const canExtra = showAnyButton && extraQuestionsAdded < MAX_EXTRA_QUESTIONS && hasExtra;
+    const canMedical = showAnyButton && medicalQuestionsAdded < MAX_MEDICAL_QUESTIONS && hasMedical;
+
+    extraBtn.style.display = canExtra ? 'block' : 'none';
+    medBtn.style.display = canMedical ? 'block' : 'none';
+
+    if (actionRow) {
+        actionRow.style.display = (canExtra || canMedical) ? 'flex' : 'none';
+    }
+}
+
+function countCorrectQuizAnswers() {
+    const formContainer = document.getElementById('interviewQuiz');
+    let correct = 0;
+    selectedQuizQuestions.forEach((q, qi) => {
+        const checkedRadio = formContainer.querySelector(`input[name="quiz_${qi}"]:checked`);
+        const selectedValue = checkedRadio ? parseInt(checkedRadio.value) : -1;
+        if (selectedValue === q.correct[0]) correct++;
+    });
+    return correct;
 }
 
 function checkQuizOnly() {
-  const formContainer = document.getElementById('interviewQuiz');
-  const quizResultEl = document.getElementById('quizResult');
+    const quizResultEl = document.getElementById('quizResult');
 
-  let quizScore = 0;
-  let quizTotal = selectedQuizQuestions.length;
+    const correctCount = countCorrectQuizAnswers();
+    const totalAsked = selectedQuizQuestions.length;
+    const finalScore = Math.min(correctCount, MAIN_QUESTIONS_COUNT);
+    const percent = (finalScore / MAIN_QUESTIONS_COUNT) * 100;
 
-  selectedQuizQuestions.forEach((q, qi) => {
-    const checkedRadio = formContainer.querySelector(`input[name="quiz_${qi}"]:checked`);
-    const selectedValue = checkedRadio ? parseInt(checkedRadio.value) : -1;
+    let bg, color, emoji, label;
+    if (percent < 50) {
+        bg = '#f8d7da'; color = '#721c24'; emoji = '🔴'; label = 'Кандидат не справился с вопросами';
+    } else if (percent < 80) {
+        bg = '#fff3cd'; color = '#856404'; emoji = '⚠️'; label = 'Кандидат ответил частично';
+    } else {
+        bg = '#d4edda'; color = '#155724'; emoji = '✅'; label = 'Кандидат отлично ответил на вопросы';
+    }
 
-    const correct = q.correct[0];
-    if (selectedValue === correct) quizScore += 1;
-  });
+    let details = `Правильных: ${correctCount} из ${totalAsked} заданных (итог: ${finalScore} / ${MAIN_QUESTIONS_COUNT})`;
+    if (extraQuestionsAdded > 0 || medicalQuestionsAdded > 0) {
+        details += `<br><small>Доп. вопросов: ${extraQuestionsAdded} / ${MAX_EXTRA_QUESTIONS} &nbsp;|&nbsp; Медицинских: ${medicalQuestionsAdded} / ${MAX_MEDICAL_QUESTIONS}</small>`;
+    }
 
-  const percent = (quizScore / quizTotal) * 100;
-
-  let bg, color, emoji, label;
-  if (percent < 50) {
-    bg = '#f8d7da'; color = '#721c24'; emoji = '🔴'; label = 'Кандидат не справился с вопросами';
-  } else if (percent < 80) {
-    bg = '#fff3cd'; color = '#856404'; emoji = '⚠️'; label = 'Кандидат ответил частично';
-  } else {
-    bg = '#d4edda'; color = '#155724'; emoji = '✅'; label = 'Кандидат отлично ответил на вопросы';
-  }
-
-  quizResultEl.innerHTML = `
-    <div class="score">${emoji} Вопросы: ${quizScore} из ${quizTotal} (${Math.round(percent)}%)</div>
+    quizResultEl.innerHTML = `
+    <div class="score">${emoji} Вопросы: ${finalScore} из ${MAIN_QUESTIONS_COUNT} (${Math.round(percent)}%)</div>
     <div class="label">${label}</div>
+    <div style="margin-top: 8px; font-size: 13px; opacity: 0.85;">${details}</div>
   `;
-  quizResultEl.style.background = bg;
-  quizResultEl.style.color = color;
-  quizResultEl.style.padding = '20px';
-  quizResultEl.style.borderRadius = '4px';
-  quizResultEl.style.textAlign = 'center';
-  quizResultEl.style.border = '1px solid rgba(0,0,0,0.1)';
-  quizResultEl.classList.remove('flash');
-  void quizResultEl.offsetWidth;
-  quizResultEl.classList.add('flash');
-  setTimeout(() => quizResultEl.classList.remove('flash'), 200);
+    quizResultEl.style.background = bg;
+    quizResultEl.style.color = color;
+    quizResultEl.style.padding = '20px';
+    quizResultEl.style.borderRadius = '4px';
+    quizResultEl.style.textAlign = 'center';
+    quizResultEl.style.border = '1px solid rgba(0,0,0,0.1)';
+    quizResultEl.classList.remove('flash');
+    void quizResultEl.offsetWidth;
+    quizResultEl.classList.add('flash');
+    setTimeout(() => quizResultEl.classList.remove('flash'), 200);
+
+    updateExtraButtonsVisibility();
 }
 
 function checkInterview() {
-  const resultEl = document.getElementById('interviewResult');
-  const formContainer = document.getElementById('interviewQuiz');
+    const resultEl = document.getElementById('interviewResult');
+    const formContainer = document.getElementById('interviewQuiz');
 
-  let checklistScore = 0;
-  let checklistTotal = 0;
-  interviewStructure.forEach((section, si) => {
-    if (section.type === 'checklist') {
-      section.items.forEach((_, ii) => {
-        checklistTotal++;
-        const cb = formContainer.querySelector(`input[name="chk_${si}_${ii}"]`);
-        if (cb && cb.checked) checklistScore++;
-      });
-    }
-  });
+    let checklistScore = 0;
+    let checklistTotal = 0;
+    interviewStructure.forEach((section, si) => {
+        if (section.type === 'checklist') {
+            section.items.forEach((_, ii) => {
+                checklistTotal++;
+                const cb = formContainer.querySelector(`input[name="chk_${si}_${ii}"]`);
+                if (cb && cb.checked) checklistScore++;
+            });
+        }
+    });
 
-  let quizScore = 0;
-  let quizTotal = selectedQuizQuestions.length;
-  selectedQuizQuestions.forEach((q, qi) => {
-    const checkedRadio = formContainer.querySelector(`input[name="quiz_${qi}"]:checked`);
-    const selectedValue = checkedRadio ? parseInt(checkedRadio.value) : -1;
-    const correct = q.correct[0];
-    if (selectedValue === correct) quizScore += 1;
-  });
+    const correctQuizCount = countCorrectQuizAnswers();
+    const finalQuizScore = Math.min(correctQuizCount, MAIN_QUESTIONS_COUNT);
+    const quizTotal = MAIN_QUESTIONS_COUNT;
 
-  const totalScore = checklistScore + quizScore;
-  const totalItems = checklistTotal + quizTotal;
-  const percent = (totalScore / totalItems) * 100;
+    const totalScore = checklistScore + finalQuizScore;
+    const totalItems = checklistTotal + quizTotal;
+    const percent = (totalScore / totalItems) * 100;
 
-  let rule;
-  if (percent < 50) rule = interviewRules[0];
-  else if (percent < 80) rule = interviewRules[1];
-  else rule = interviewRules[2];
+    let rule;
+    if (percent < 50) rule = interviewRules[0];
+    else if (percent < 80) rule = interviewRules[1];
+    else rule = interviewRules[2];
 
-  resultEl.innerHTML = `
+    resultEl.innerHTML = `
     <div class="score">${rule.emoji} Результат: ${totalScore} из ${totalItems} (${Math.round(percent)}%)</div>
     <div class="label">${rule.label}</div>
     <div class="recommendation">
       ${rule.recommendation}<br>
-      <small>Чек-пункты: ${checklistScore} / ${checklistTotal} &nbsp;|&nbsp; Вопросы: ${quizScore} / ${quizTotal}</small>
+      <small>Чек-пункты: ${checklistScore} / ${checklistTotal} &nbsp;|&nbsp; Вопросы: ${finalQuizScore} / ${quizTotal}</small>
     </div>
   `;
-  resultEl.style.background = rule.bg;
-  resultEl.style.color = rule.color;
-  resultEl.style.padding = '25px';
-  resultEl.style.borderRadius = '4px';
-  resultEl.style.textAlign = 'center';
-  resultEl.style.marginTop = '30px';
-  resultEl.style.border = '1px solid rgba(0,0,0,0.1)';
-  resultEl.style.opacity = '1';
-  resultEl.classList.remove('flash');
-  void resultEl.offsetWidth;
-  resultEl.classList.add('flash');
-  setTimeout(() => resultEl.classList.remove('flash'), 200);
+    resultEl.style.background = rule.bg;
+    resultEl.style.color = rule.color;
+    resultEl.style.padding = '25px';
+    resultEl.style.borderRadius = '4px';
+    resultEl.style.textAlign = 'center';
+    resultEl.style.marginTop = '30px';
+    resultEl.style.border = '1px solid rgba(0,0,0,0.1)';
+    resultEl.style.opacity = '1';
+    resultEl.classList.remove('flash');
+    void resultEl.offsetWidth;
+    resultEl.classList.add('flash');
+    setTimeout(() => resultEl.classList.remove('flash'), 200);
 
-  currentInterviewResult = { checklistScore, checklistTotal, quizScore, quizTotal, totalScore, totalItems, rule };
+    currentInterviewResult = { checklistScore, checklistTotal, finalQuizScore, quizTotal, totalScore, totalItems, rule };
 }
 
 function resetInterview() {
-  document.querySelectorAll('#interviewQuiz input[type="checkbox"]').forEach(cb => cb.checked = false);
-  document.querySelectorAll('#interviewQuiz input[type="radio"]').forEach(rb => rb.checked = false);
-  document.getElementById('interviewResult').innerHTML = '';
-  currentInterviewResult = null;
-  selectedQuizQuestions = [];
-  quizSectionElement = null;
+    document.querySelectorAll('#interviewQuiz input[type="checkbox"]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('#interviewQuiz input[type="radio"]').forEach(rb => rb.checked = false);
+    document.getElementById('interviewResult').innerHTML = '';
+    document.getElementById('quizResult').innerHTML = '';
+    currentInterviewResult = null;
+    selectedQuizQuestions = [];
+    quizSectionElement = null;
+    extraQuestionsAdded = 0;
+    medicalQuestionsAdded = 0;
 
-  buildInterviewQuiz();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+    buildInterviewQuiz();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
 }
