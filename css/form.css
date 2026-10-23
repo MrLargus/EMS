@@ -166,9 +166,9 @@ button.gen-btn:hover {
 .menu-btn {
   padding: 35px 25px;
   background: #ffffff;
-  color: #1a3a6c;
+  color: #3a69b4;
   border: 1px solid #dce1e6;
-  border-top: 4px solid #1a3a6c;
+  border-top: 4px solid #3a69b4;
   border-radius: 0;
   cursor: pointer;
   transition: all 0.2s;
@@ -203,7 +203,7 @@ button.gen-btn:hover {
 }
 
 .menu-btn.special {
-  border-top-color: #3967b1;
+  border-top-color: #1a3a6c;
 }
 
 .menu-btn.special .btn-title {
