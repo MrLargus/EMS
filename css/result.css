@@ -1,0 +1,112 @@
+#result, #specialResult {
+  margin-top: 30px;
+  padding: 25px;
+  border-radius: 4px;
+  transition: background 0.4s, color 0.4s;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+#result .score, #specialResult .score {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#result .label, #specialResult .label {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+#result .recommendation, #specialResult .recommendation {
+  font-size: 15px;
+  line-height: 1.5;
+  padding-top: 15px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.copy-status {
+  text-align: center;
+  color: #27ae60;
+  font-weight: 600;
+  margin-top: 15px;
+  font-size: 15px;
+  min-height: 20px;
+}
+
+.stamp-img {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  opacity: 0.85;
+  mix-blend-mode: multiply;
+  z-index: 10;
+}
+
+#ciStampArea {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 10;
+}
+#ciStampArea .stamp-img { opacity: 0.9; }
+
+.cert-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.rp-row { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 12px; 
+  margin-top: 12px; 
+}
+
+.cert-actions button,
+.rp-row button {
+  margin-top: 0;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 14px 16px;
+  border-radius: 3px;
+  border: 1px solid #bdc3c7;
+  cursor: pointer;
+  color: #2c3e50;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.cert-actions button:hover,
+.rp-row button:hover {
+  background: #f4f6f8;
+}
+
+.cert-actions button:active,
+.rp-row button:active {
+  background: #e1e8ed;
+}
+
+button.copy-btn { border-color: #4752C4; color: #4752C4; }
+button.copy-btn:hover { background: #f0f2ff; }
+
+button.img-btn  { border-color: #2980b9; color: #216a9c; }
+button.img-btn:hover { background: #eaf4fb; }
+
+button.rp-btn   { border-color: #8e44ad; color: #7d3c98; }
+button.rp-btn:hover { background: #f8eefb; }
+
+button.do-btn   { border-color: #16a085; color: #13856e; }
+button.do-btn:hover { background: #eafaf7; }

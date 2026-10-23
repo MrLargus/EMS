@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>|EMS| Портал стажировки и собеседований</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/form.css">
+  <link rel="stylesheet" href="css/result.css">
+  <link rel="stylesheet" href="css/certificate.css">
+</head>
+<body>
+
+  <header class="ems-header">
+    <div class="ems-header-inner">
+      <img src="assets/logo-star.svg" alt="EMS" class="ems-logo">
+      <div class="ems-header-text">
+        <span class="ems-title">Emergency Medical Service</span>
+        <span class="ems-subtitle">Отдел кадров и стажировки</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="ems-content">
+    <!-- ГЛАВНОЕ МЕНЮ -->
+    <div id="startScreen">
+      <h1>Портал EMS</h1>
+      <div class="subtitle">Выберите необходимый раздел</div>
+
+      <div class="menu-grid">
+        <button class="menu-btn" onclick="openChecklist()">
+          <span class="btn-title">Чек-лист стажировки</span>
+          <span class="btn-subtitle">Для интернов и наставников</span>
+        </button>
+        <button class="menu-btn special" onclick="openInterviewTest()">
+          <span class="btn-title">Тест для кандидатов</span>
+          <span class="btn-subtitle">Вопросы на собеседовании</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ЧЕК-ЛИСТ СТАЖИРОВКИ -->
+    <div id="checklistWrapper" style="display: none;">
+      <button class="back-btn" onclick="goToMenu()">← Вернуться в главное меню</button>
+      <h1>Чек-лист стажировки интерна</h1>
+      <div class="subtitle">Отметьте выполненные пункты</div>
+
+      <form id="checklistForm"></form>
+
+      <div class="form-actions">
+        <button onclick="checkChecklist()">Завершить стажировку</button>
+        <button class="secondary" onclick="resetChecklist()">Очистить форму</button>
+      </div>
+
+      <div id="checklistResult"></div>
+    </div>
+
+    <!-- ТЕСТ ДЛЯ КАНДИДАТОВ -->
+    <div id="interviewWrapper" style="display: none;">
+      <button class="back-btn" onclick="goToMenu()">← Вернуться в главное меню</button>
+      <h1>Собеседование</h1>
+      <div class="subtitle">Отметьте выполненные пункты и ответьте на вопросы</div>
+
+      <form id="interviewQuiz"></form>
+
+      <div class="form-actions">
+        <button onclick="checkInterview()">Завершить собеседование</button>
+        <button class="secondary" onclick="resetInterview()">Очистить форму</button>
+      </div>
+
+      <div id="interviewResult"></div>
+    </div>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/checklist.js"></script>
+  <script src="js/interview.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

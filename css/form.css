@@ -1,0 +1,359 @@
+.patient-fields {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 0;
+  margin-bottom: 30px;
+  border: 1px solid #dce1e6;
+  border-top: 4px solid #1a3a6c;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.patient-fields label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.patient-fields input {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  border: 1px solid #bdc3c7;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  background: #fafbfc;
+  transition: border 0.2s;
+}
+
+.patient-fields input:focus {
+  outline: none;
+  border-color: #1a3a6c;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(26, 58, 108, 0.1);
+}
+
+.patient-fields input:last-child { margin-bottom: 0; }
+
+.block-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 40px 0 20px;
+  padding: 15px 20px;
+  background: #1a3a6c; /* Темно-синий фон */
+  color: #ffffff;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.question {
+  margin-bottom: 25px;
+  padding: 25px;
+  border: 1px solid #bdc3c7; /* Четкая серая рамка */
+  border-left: 4px solid #1a3a6c; /* Синий акцент слева */
+  border-radius: 3px;
+  background: #ffffff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.04); /* Легкая тень для объема */
+}
+
+.question h3 { 
+  margin-top: 0; 
+  font-size: 17px; 
+  font-weight: 700;
+  color: #1a3a6c; /* Синий цвет заголовка вопроса */
+  margin-bottom: 15px;
+  line-height: 1.4;
+  border-bottom: 1px solid #eef2f5;
+  padding-bottom: 10px;
+}
+
+label.answer {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 8px 0;
+  padding: 14px;
+  background: #f8fafc;
+  border: 1px solid #dce1e6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+label.answer:hover {
+  background: #eef2f5;
+  border-color: #bdc3c7;
+}
+
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  cursor: pointer;
+  accent-color: #1a3a6c;
+}
+
+/* Базовые кнопки */
+button {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  border: none;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+/* Основная кнопка */
+.form-actions button:first-child {
+  background: #1a3a6c;
+  color: #ffffff;
+  border: 1px solid #1a3a6c;
+}
+.form-actions button:first-child:hover {
+  background: #122a4f;
+}
+
+/* Кнопка Сбросить */
+button.secondary {
+  background: #ffffff;
+  color: #7f8c8d;
+  border: 1px solid #bdc3c7;
+}
+button.secondary:hover {
+  background: #f4f6f8;
+  color: #2c3e50;
+}
+
+/* Кнопка Генерации */
+button.gen-btn {
+  background: #2980b9;
+  color: white;
+  margin-top: 25px;
+  padding: 16px;
+  font-size: 17px;
+}
+button.gen-btn:hover {
+  background: #216a9c;
+}
+
+/* Меню */
+#startScreen {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 700px;
+  margin: 40px auto;
+}
+
+.menu-btn {
+  padding: 35px 25px;
+  background: #ffffff;
+  color: #1a3a6c;
+  border: 1px solid #dce1e6;
+  border-top: 4px solid #1a3a6c;
+  border-radius: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  text-align: center;
+}
+
+.menu-btn:hover {
+  background: #f8fafc;
+  border-color: #1a3a6c;
+  box-shadow: 0 8px 20px rgba(26, 58, 108, 0.08);
+}
+
+.btn-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-subtitle {
+  font-size: 14px;
+  color: #7f8c8d;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.menu-btn.special {
+  border-top-color: #1a3a6c;
+}
+
+.menu-btn.special .btn-title {
+  color: #1a3a6c;
+}
+
+.back-btn {
+  background: transparent;
+  color: #7f8c8d;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 20px;
+  width: auto;
+  text-align: left;
+}
+
+.back-btn:hover {
+  color: #1a3a6c;
+}
+
+.empty-state {
+  text-align: center; 
+  margin-top: 40px; 
+  font-size: 16px; 
+  color: #7f8c8d;
+  padding: 50px;
+  background: #ffffff;
+  border: 1px solid #dce1e6;
+  border-radius: 4px;
+}
+
+@media (max-width: 600px) {
+  .menu-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Модальное окно выбора отдела ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 4px;
+  border-top: 4px solid #1a3a6c;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #1a3a6c;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.modal-subtitle {
+  color: #7f8c8d;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.modal-btn {
+  padding: 20px;
+  background: #f8fafc;
+  color: #1a3a6c;
+  border: 1px solid #dce1e6;
+  border-left: 4px solid #1a3a6c;
+  border-radius: 3px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  margin-top: 0;
+}
+
+.modal-btn:hover {
+  background: #eef2f5;
+  border-color: #1a3a6c;
+}
+
+.modal-close {
+  background: transparent;
+  color: #7f8c8d;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px;
+  width: auto;
+  margin: 0 auto;
+}
+
+.modal-close:hover {
+  color: #2c3e50;
+}
+
+@media (max-width: 500px) {
+  .modal-grid { grid-template-columns: 1fr; }
+}
+
+/* Заблокированные кнопки в модалке */
+.modal-btn.disabled,
+.modal-btn:disabled {
+  background: #f0f2f5;
+  color: #a0a8b3;
+  border-left-color: #c0c7d0;
+  border-color: #dce1e6;
+  cursor: not-allowed;
+  opacity: 0.7;
+  position: relative;
+}
+
+.modal-btn.disabled:hover,
+.modal-btn:disabled:hover {
+  background: #f0f2f5;
+  border-color: #dce1e6;
+}
+
+/* Бейдж «В разработке» */
+.modal-btn.disabled::after,
+.modal-btn:disabled::after {
+  content: 'в разработке';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 600;
+  color: #a0a8b3;
+  text-transform: lowercase;
+  letter-spacing: 0.3px;
+}
