@@ -30,18 +30,20 @@
       <h1>Портал EMS</h1>
       <div class="subtitle">Выберите необходимый раздел</div>
 
-      <!-- НОВОЕ: поле куратора -->
-      <div class="curator-input-group">
+      <!-- Контейнер для приколов -->
+      <div id="jokeOverlay" style="position: relative; display: none;"></div>
+
+      <div class="curator-input-group" id="curatorGroup">
         <label for="globalCuratorInput">👤 Ваш Discord-логин (Куратор)</label>
         <input type="text" id="globalCuratorInput" placeholder="Например: name#1234 или @name" autocomplete="off">
       </div>
 
       <div class="menu-grid">
-        <button class="menu-btn special" onclick="openInterviewTest()">
+        <button class="menu-btn special" onclick="tryOpenInterviewTest()">
           <span class="btn-title">Тест для кандидатов</span>
           <span class="btn-subtitle">Вопросы для собеседований</span>
         </button>
-        <button class="menu-btn" onclick="openChecklist()">
+        <button class="menu-btn" onclick="tryOpenChecklist()">
           <span class="btn-title">Чек-лист стажировки</span>
           <span class="btn-subtitle">Лекции для интернов</span>
         </button>
@@ -54,6 +56,14 @@
       <h1>Чек-лист стажировки интерна</h1>
       <div class="subtitle">Отметьте выполненные пункты</div>
 
+      <!-- Блок добавления стажёров -->
+      <div class="trainee-manager">
+        <div id="traineeInputsContainer"></div>
+        <button type="button" id="addTraineeBtn" class="gen-btn" onclick="addTraineeInput()" style="margin-top: 10px;">
+          ➕ Добавить стажёра
+        </button>
+      </div>
+
       <form id="checklistForm"></form>
 
       <div class="form-actions">
@@ -62,7 +72,7 @@
       </div>
 
       <div id="checklistResult"></div>
-      <!-- НОВОЕ: блок аудита для стажировки -->
+      <!-- Блок аудита для стажировки -->
       <div id="checklistAuditBlock" style="display: none; margin-top: 20px;"></div>
     </div>
 
@@ -80,7 +90,7 @@
       </div>
 
       <div id="interviewResult"></div>
-      <!-- НОВОЕ: блок кадрового аудита -->
+      <!-- Блок кадрового аудита -->
       <div id="auditBlock" style="display: none; margin-top: 20px;"></div>
     </div>
   </main>

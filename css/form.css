@@ -5,7 +5,7 @@
   margin-bottom: 30px;
   border: 1px solid #dce1e6;
   border-top: 4px solid #1a3a6c;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .patient-fields label {
@@ -36,36 +36,43 @@
   box-shadow: 0 0 0 3px rgba(26, 58, 108, 0.1);
 }
 
-.patient-fields input:last-child { margin-bottom: 0; }
+.patient-fields input:last-child {
+  margin-bottom: 0;
+}
 
 .block-title {
   font-size: 16px;
   font-weight: 700;
   margin: 40px 0 20px;
   padding: 15px 20px;
-  background: #1a3a6c; /* Темно-синий фон */
+  background: #1a3a6c;
+  /* Темно-синий фон */
   color: #ffffff;
   border-radius: 3px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .question {
   margin-bottom: 25px;
   padding: 25px;
-  border: 1px solid #bdc3c7; /* Четкая серая рамка */
-  border-left: 4px solid #1a3a6c; /* Синий акцент слева */
+  border: 1px solid #bdc3c7;
+  /* Четкая серая рамка */
+  border-left: 4px solid #1a3a6c;
+  /* Синий акцент слева */
   border-radius: 3px;
   background: #ffffff;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.04); /* Легкая тень для объема */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+  /* Легкая тень для объема */
 }
 
-.question h3 { 
-  margin-top: 0; 
-  font-size: 17px; 
+.question h3 {
+  margin-top: 0;
+  font-size: 17px;
   font-weight: 700;
-  color: #1a3a6c; /* Синий цвет заголовка вопроса */
+  color: #1a3a6c;
+  /* Синий цвет заголовка вопроса */
   margin-bottom: 15px;
   line-height: 1.4;
   border-bottom: 1px solid #eef2f5;
@@ -122,6 +129,7 @@ button {
   color: #ffffff;
   border: 1px solid #1a3a6c;
 }
+
 .form-actions button:first-child:hover {
   background: #122a4f;
 }
@@ -132,6 +140,7 @@ button.secondary {
   color: #7f8c8d;
   border: 1px solid #bdc3c7;
 }
+
 button.secondary:hover {
   background: #f4f6f8;
   color: #2c3e50;
@@ -145,6 +154,7 @@ button.gen-btn {
   padding: 16px;
   font-size: 17px;
 }
+
 button.gen-btn:hover {
   background: #216a9c;
 }
@@ -177,7 +187,7 @@ button.gen-btn:hover {
   align-items: center;
   justify-content: center;
   margin-top: 0;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
   text-align: center;
 }
 
@@ -228,9 +238,9 @@ button.gen-btn:hover {
 }
 
 .empty-state {
-  text-align: center; 
-  margin-top: 40px; 
-  font-size: 16px; 
+  text-align: center;
+  margin-top: 40px;
+  font-size: 16px;
   color: #7f8c8d;
   padding: 50px;
   background: #ffffff;
@@ -239,7 +249,9 @@ button.gen-btn:hover {
 }
 
 @media (max-width: 600px) {
-  .menu-grid { grid-template-columns: 1fr; }
+  .menu-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ===== Модальное окно выбора отдела ===== */
@@ -322,7 +334,9 @@ button.gen-btn:hover {
 }
 
 @media (max-width: 500px) {
-  .modal-grid { grid-template-columns: 1fr; }
+  .modal-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* Заблокированные кнопки в модалке */
@@ -390,7 +404,8 @@ button.gen-btn:hover {
   background: #fafbfc;
   transition: border 0.2s, box-shadow 0.2s;
   font-family: inherit;
-  color: #1a3a6c; /* Синий текст для акцента */
+  color: #1a3a6c;
+  /* Синий текст для акцента */
   font-weight: 600;
 }
 
@@ -404,4 +419,180 @@ button.gen-btn:hover {
 .curator-input-group input::placeholder {
   color: #a0a8b3;
   font-weight: 400;
+}
+
+/* Анимация ошибки для поля куратора */
+/* ===== Уровни тряски ===== */
+@keyframes shake-1 {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes shake-2 {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-10px) rotate(-2deg); }
+  40% { transform: translateX(10px) rotate(2deg); }
+  60% { transform: translateX(-10px) rotate(-1deg); }
+  80% { transform: translateX(10px) rotate(1deg); }
+}
+
+@keyframes shake-3 {
+  0%, 100% { transform: translateX(0) translateY(0) rotate(0); }
+  10% { transform: translateX(-15px) translateY(-5px) rotate(-3deg); }
+  30% { transform: translateX(15px) translateY(5px) rotate(3deg); }
+  50% { transform: translateX(-15px) translateY(-5px) rotate(-3deg); }
+  70% { transform: translateX(15px) translateY(5px) rotate(3deg); }
+  90% { transform: translateX(-10px) translateY(2px) rotate(-1deg); }
+}
+
+.curator-input-group.error-shake-1 {
+  animation: shake-1 0.4s ease-in-out both;
+  border-color: #e74c3c !important;
+}
+
+.curator-input-group.error-shake-2 {
+  animation: shake-2 0.5s ease-in-out both;
+  border-color: #e74c3c !important;
+  box-shadow: 0 0 0 4px rgba(231, 76, 60, 0.2) !important;
+}
+
+.curator-input-group.error-shake-3 {
+  animation: shake-3 0.6s linear infinite; /* infinite на время действия */
+  border-color: #c0392b !important;
+  background: #fff5f5 !important;
+  box-shadow: 0 0 0 8px rgba(231, 76, 60, 0.3) !important;
+}
+.curator-input-group.error-shake-3 label,
+.curator-input-group.error-shake-3 input {
+  color: #c0392b !important;
+  border-color: #c0392b !important;
+}
+
+/* Плавное исчезновение инпута */
+#curatorGroup {
+  transition: opacity 0.3s ease;
+}
+
+/* ===== Пальцы ===== */
+.joke-finger {
+  position: absolute;
+  font-size: 45px;
+  z-index: 100;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+}
+
+/* Левый палец: смотрит вправо-вниз */
+.finger-top-left {
+  top: -20px;
+  left: 140px;
+  /* Поворачиваем вправо-вниз */
+  transform: rotate(115deg);
+  animation: poke-left 0.4s infinite alternate;
+}
+
+/* Правый палец: смотрит влево-вниз */
+.finger-top-right {
+  top: -20px;
+  right: 140px;
+  /* Отражаем по горизонтали и поворачиваем влево-вниз */
+  transform: scaleX(-1) rotate(115deg);
+  animation: poke-right 0.4s infinite alternate;
+}
+
+@keyframes poke-left {
+  from { transform: rotate(115deg) translate(0, 0) scale(1); }
+  to { transform: rotate(115deg) translate(-10px, -10px) scale(1.1); }
+}
+
+@keyframes poke-right {
+  from { transform: scaleX(-1) rotate(115deg) translate(0, 0) scale(1); }
+  to { transform: scaleX(-1) rotate(115deg) translate(-10px, -10px) scale(1.1); }
+}
+
+/* ===== Смайлик ===== */
+.joke-emoji {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 80px;
+  z-index: 100;
+  animation: pop-emoji 0.3s ease-out;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+}
+
+@keyframes pop-emoji {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  80% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* ===== Управление стажёрами ===== */
+.trainee-manager {
+  background: #ffffff;
+  padding: 20px;
+  border: 1px solid #dce1e6;
+  border-top: 4px solid #2980b9;
+  border-radius: 3px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.trainee-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.trainee-row input {
+  flex: 1;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #bdc3c7;
+  border-radius: 3px;
+  background: #fafbfc;
+  transition: border 0.2s;
+  font-family: inherit;
+  color: #1a3a6c;
+  font-weight: 600;
+}
+
+.trainee-row input:focus {
+  outline: none;
+  border-color: #1a3a6c;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(26, 58, 108, 0.1);
+}
+
+.trainee-row button.remove-trainee {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin: 0;
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  font-size: 18px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+}
+
+.trainee-row button.remove-trainee:hover {
+  background: #f1b0b7;
+}
+
+#addTraineeBtn {
+  background: #2980b9;
+  margin-top: 0 !important; /* Перебиваем margin-top у .gen-btn */
+  padding: 12px;
+  font-size: 15px;
+}
+
+#addTraineeBtn:hover {
+  background: #216a9c;
 }

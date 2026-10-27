@@ -3,6 +3,13 @@ function openChecklist() {
   document.getElementById('interviewWrapper').style.display = 'none';
   document.getElementById('checklistWrapper').style.display = 'block';
 
+  // При открытии полей стажёров нет, показываем кнопку добавления
+  const container = document.getElementById('traineeInputsContainer');
+  if (container) {
+    container.innerHTML = '';
+    updateAddBtnVisibility();
+  }
+
   buildChecklist();
   window.scrollTo(0, 0);
 }
@@ -82,7 +89,7 @@ function checkChecklist() {
   resultEl.classList.add('flash');
   setTimeout(() => resultEl.classList.remove('flash'), 200);
 
-  // НОВОЕ: показываем блок аудита
+  // Показываем блок аудита
   renderChecklistAuditBlock();
 }
 
@@ -116,11 +123,29 @@ function copyChecklistAuditText() {
   const dateStr = `${dd}.${mm}.${yyyy}`;
 
   const curatorLogin = localStorage.getItem('ems_curator_login') || '';
+  const curatorText = curatorLogin ? `@${curatorLogin}` : '';
 
+  // Собираем всех введенных стажёров
+  const traineeInputs = document.querySelectorAll('.trainee-row input');
+  const trainees = [];
+  
+  traineeInputs.forEach(input => {
+    const val = input.value.trim();
+    if (val) {
+      // Добавляем @, если его еще нет в начале строки
+      const formattedName = val.startsWith('@') ? val : `@${val}`;
+      trainees.push(formattedName);
+    }
+  });
+
+  // Объединяем всех стажёров через запятую и пробел
+  const traineesString = trainees.join(' ');
+
+  // Формируем единый текст аудита
   const text =
-    `Имя: \n` +
+    `Имя: ${traineesString}\n` +
     `Должность: Интерн\n` +
-    `Куратор: @${curatorLogin}\n` +
+    `Куратор: ${curatorText}\n` +
     `Переведён на должность: Мл. Фельдшер\n` +
     `Дата: ${dateStr}\n` +
     `@High staff`;
@@ -148,5 +173,64 @@ function resetChecklist() {
     auditBlock.style.display = 'none';
   }
 
+  // Очищаем стажёров (оставляем пустой контейнер, полей нет)
+  const container = document.getElementById('traineeInputsContainer');
+  if (container) {
+    container.innerHTML = '';
+    updateAddBtnVisibility();
+  }
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== ФУНКЦИИ УПРАВЛЕНИЯ СТАЖЁРАМИ =====
+const MAX_TRAINEES = 3;
+
+function addTraineeInput() {
+  const container = document.getElementById('traineeInputsContainer');
+  if (!container) return;
+
+  const currentCount = container.querySelectorAll('.trainee-row').length;
+  if (currentCount >= MAX_TRAINEES) {
+    alert(`Максимум ${MAX_TRAINEES} стажёра за раз.`);
+    return;
+  }
+
+  const row = document.createElement('div');
+  row.className = 'trainee-row';
+  
+  // ТЕПЕРЬ КРЕСТИК ЕСТЬ ВСЕГДА
+  row.innerHTML = `
+    <input type="text" placeholder="Discord-логин стажёра" autocomplete="off">
+    <button type="button" class="remove-trainee" onclick="removeTraineeInput(this)">✖</button>
+  `;
+
+  container.appendChild(row);
+  updateAddBtnVisibility();
+  
+  // Фокус на новое поле
+  const newInput = row.querySelector('input');
+  if (newInput) newInput.focus();
+}
+
+function removeTraineeInput(btn) {
+  const container = document.getElementById('traineeInputsContainer');
+  if (!container) return;
+
+  const row = btn.closest('.trainee-row');
+  if (row) {
+    row.remove();
+    updateAddBtnVisibility();
+  }
+}
+
+function updateAddBtnVisibility() {
+  const container = document.getElementById('traineeInputsContainer');
+  const btn = document.getElementById('addTraineeBtn');
+  if (!container || !btn) return;
+
+  const currentCount = container.querySelectorAll('.trainee-row').length;
+
+  // Если достигли лимита — прячем кнопку, иначе показываем
+  btn.style.display = currentCount >= MAX_TRAINEES ? 'none' : 'flex';
 }

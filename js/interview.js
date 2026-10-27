@@ -437,7 +437,7 @@ function copyAuditText() {
 
     // Очищаем форму после копирования (с задержкой, чтобы увидеть уведомление)
     setTimeout(() => {
-        resetChecklist();
+        resetInterview();
     }, 1500);
 }
 

@@ -172,7 +172,7 @@ const interviewStructure = [
   },
   {
     type: 'quiz',
-    block: "3. Обязательные вопросы (Загадки)",
+    block: "3. Обязательные вопросы",
     questions: riddleQuestions
   },
   {
