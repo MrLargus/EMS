@@ -1,13 +1,15 @@
-#result, #specialResult {
+#result,
+#specialResult {
   margin-top: 30px;
   padding: 25px;
   border-radius: 4px;
   transition: background 0.4s, color 0.4s;
   text-align: center;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-#result .score, #specialResult .score {
+#result .score,
+#specialResult .score {
   font-size: 16px;
   font-weight: 700;
   margin-bottom: 10px;
@@ -15,13 +17,15 @@
   letter-spacing: 1px;
 }
 
-#result .label, #specialResult .label {
+#result .label,
+#specialResult .label {
   font-size: 22px;
   font-weight: 700;
   margin-bottom: 15px;
 }
 
-#result .recommendation, #specialResult .recommendation {
+#result .recommendation,
+#specialResult .recommendation {
   font-size: 15px;
   line-height: 1.5;
   padding-top: 15px;
@@ -34,7 +38,17 @@
   font-weight: 600;
   margin-top: 15px;
   font-size: 15px;
-  min-height: 20px;
+  min-height: 0;          /* Убираем лишнюю высоту пустого блока */
+  height: auto;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.audit-card button:focus,
+.audit-card button:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 
 .stamp-img {
@@ -55,7 +69,10 @@
   overflow: hidden;
   z-index: 10;
 }
-#ciStampArea .stamp-img { opacity: 0.9; }
+
+#ciStampArea .stamp-img {
+  opacity: 0.9;
+}
 
 .cert-actions {
   display: grid;
@@ -64,11 +81,11 @@
   margin-top: 20px;
 }
 
-.rp-row { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-  gap: 12px; 
-  margin-top: 12px; 
+.rp-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
 }
 
 .cert-actions button,
@@ -99,14 +116,65 @@
   background: #e1e8ed;
 }
 
-button.copy-btn { border-color: #4752C4; color: #4752C4; }
-button.copy-btn:hover { background: #f0f2ff; }
+button.copy-btn {
+  border-color: #4752C4;
+  color: #4752C4;
+}
 
-button.img-btn  { border-color: #2980b9; color: #216a9c; }
-button.img-btn:hover { background: #eaf4fb; }
+button.copy-btn:hover {
+  background: #f0f2ff;
+}
 
-button.rp-btn   { border-color: #8e44ad; color: #7d3c98; }
-button.rp-btn:hover { background: #f8eefb; }
+button.img-btn {
+  border-color: #2980b9;
+  color: #216a9c;
+}
 
-button.do-btn   { border-color: #16a085; color: #13856e; }
-button.do-btn:hover { background: #eafaf7; }
+button.img-btn:hover {
+  background: #eaf4fb;
+}
+
+button.rp-btn {
+  border-color: #8e44ad;
+  color: #7d3c98;
+}
+
+button.rp-btn:hover {
+  background: #f8eefb;
+}
+
+button.do-btn {
+  border-color: #16a085;
+  color: #13856e;
+}
+
+button.do-btn:hover {
+  background: #eafaf7;
+}
+
+/* ===== Блок кадрового аудита ===== */
+.audit-card {
+  background: #ffffff;
+  padding: 25px;
+  border: 1px solid #dce1e6;
+  border-top: 4px solid #1a3a6c;
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.audit-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a3a6c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.audit-subtitle {
+  font-size: 14px;
+  color: #7f8c8d;
+  text-align: center;
+  margin-bottom: 20px;
+}

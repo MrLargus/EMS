@@ -81,10 +81,72 @@ function checkChecklist() {
   void resultEl.offsetWidth;
   resultEl.classList.add('flash');
   setTimeout(() => resultEl.classList.remove('flash'), 200);
+
+  // НОВОЕ: показываем блок аудита
+  renderChecklistAuditBlock();
+}
+
+// ===== КАДРОВЫЙ АУДИТ ДЛЯ СТАЖИРОВКИ =====
+
+function renderChecklistAuditBlock() {
+  const auditBlock = document.getElementById('checklistAuditBlock');
+  if (!auditBlock) return;
+
+  auditBlock.innerHTML = `
+    <div class="audit-card">
+      <div class="audit-title">📋 Кадровый аудит (Стажировка)</div>
+      <div class="audit-subtitle">Скопируйте шаблон и вставьте в кадровый аудит</div>
+
+      <div class="form-actions" style="margin-top: 0;">
+        <button type="button" class="gen-btn" onclick="copyChecklistAuditText()" style="margin-top: 0;">
+          📋 Скопировать шаблон
+        </button>
+      </div>
+      <div id="copyStatus" class="copy-status"></div>
+    </div>
+  `;
+  auditBlock.style.display = 'block';
+}
+
+function copyChecklistAuditText() {
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2, '0');
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const yyyy = now.getFullYear();
+  const dateStr = `${dd}.${mm}.${yyyy}`;
+
+  const curatorLogin = localStorage.getItem('ems_curator_login') || '';
+
+  const text =
+    `Имя: \n` +
+    `Должность: Интерн\n` +
+    `Куратор: @${curatorLogin}\n` +
+    `Переведён на должность: Мл. Фельдшер\n` +
+    `Дата: ${dateStr}\n` +
+    `@High staff`;
+
+  copyText(text, '✅ Шаблон скопирован в буфер обмена!');
+
+  // Очищаем форму после копирования (с задержкой, чтобы увидеть уведомление)
+  setTimeout(() => {
+    resetChecklist();
+  }, 1500);
 }
 
 function resetChecklist() {
   document.querySelectorAll('#checklistForm input[type="checkbox"]').forEach(cb => cb.checked = false);
-  document.getElementById('checklistResult').innerHTML = '';
+
+  // Очищаем результат и убираем его стили
+  const resultEl = document.getElementById('checklistResult');
+  resultEl.innerHTML = '';
+  resultEl.removeAttribute('style');
+
+  // Скрываем блок аудита
+  const auditBlock = document.getElementById('checklistAuditBlock');
+  if (auditBlock) {
+    auditBlock.innerHTML = '';
+    auditBlock.style.display = 'none';
+  }
+
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }

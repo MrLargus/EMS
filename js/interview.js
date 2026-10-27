@@ -357,13 +357,34 @@ function checkInterview() {
     setTimeout(() => resultEl.classList.remove('flash'), 200);
 
     currentInterviewResult = { checklistScore, checklistTotal, finalQuizScore, quizTotal, totalScore, totalItems, rule };
+
+    // НОВОЕ: показать блок кадрового аудита
+    renderAuditBlock();
 }
 
 function resetInterview() {
     document.querySelectorAll('#interviewQuiz input[type="checkbox"]').forEach(cb => cb.checked = false);
     document.querySelectorAll('#interviewQuiz input[type="radio"]').forEach(rb => rb.checked = false);
-    document.getElementById('interviewResult').innerHTML = '';
-    document.getElementById('quizResult').innerHTML = '';
+
+    // Очищаем и сбрасываем стили у результата собеседования
+    const interviewResultEl = document.getElementById('interviewResult');
+    interviewResultEl.innerHTML = '';
+    interviewResultEl.removeAttribute('style');
+
+    // Очищаем и сбрасываем стили у результата теста (вопросов)
+    const quizResultEl = document.getElementById('quizResult');
+    if (quizResultEl) {
+        quizResultEl.innerHTML = '';
+        quizResultEl.removeAttribute('style');
+    }
+
+    // Скрываем блок аудита
+    const auditBlock = document.getElementById('auditBlock');
+    if (auditBlock) {
+        auditBlock.innerHTML = '';
+        auditBlock.style.display = 'none';
+    }
+
     currentInterviewResult = null;
     selectedQuizQuestions = [];
     quizSectionElement = null;
@@ -372,6 +393,52 @@ function resetInterview() {
 
     buildInterviewQuiz();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== КАДРОВЫЙ АУДИТ =====
+
+function renderAuditBlock() {
+    const auditBlock = document.getElementById('auditBlock');
+    if (!auditBlock) return;
+
+    auditBlock.innerHTML = `
+      <div class="audit-card">
+        <div class="audit-title">📋 Кадровый аудит</div>
+        <div class="audit-subtitle">Скопируйте шаблон и вставьте в кадровый аудит</div>
+
+        <div class="form-actions" style="margin-top: 0;">
+          <button type="button" class="gen-btn" onclick="copyAuditText()" style="margin-top: 0;">
+            📋 Скопировать шаблон
+          </button>
+        </div>
+        <div id="copyStatus" class="copy-status"></div>
+      </div>
+    `;
+    auditBlock.style.display = 'block';
+}
+
+function copyAuditText() {
+    const now = new Date();
+    const dd = String(now.getDate()).padStart(2, '0');
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const yyyy = now.getFullYear();
+    const dateStr = `${dd}.${mm}.${yyyy}`;
+
+    const curatorLogin = localStorage.getItem('ems_curator_login') || '';
+
+    const text =
+        `Имя: \n` +
+        `Должность: Интерн\n` +
+        `Куратор: @${curatorLogin}\n` +
+        `Дата: ${dateStr}\n` +
+        `@High staff`;
+
+    copyText(text, '✅ Шаблон скопирован в буфер обмена!');
+
+    // Очищаем форму после копирования (с задержкой, чтобы увидеть уведомление)
+    setTimeout(() => {
+        resetChecklist();
+    }, 1500);
 }
 
 function shuffleArray(array) {

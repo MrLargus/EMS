@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
   <link rel="stylesheet" href="css/result.css">
   <link rel="stylesheet" href="css/certificate.css">
 </head>
+
 <body>
 
   <header class="ems-header">
@@ -27,6 +29,12 @@
     <div id="startScreen">
       <h1>Портал EMS</h1>
       <div class="subtitle">Выберите необходимый раздел</div>
+
+      <!-- НОВОЕ: поле куратора -->
+      <div class="curator-input-group">
+        <label for="globalCuratorInput">👤 Ваш Discord-логин (Куратор)</label>
+        <input type="text" id="globalCuratorInput" placeholder="Например: name#1234 или @name" autocomplete="off">
+      </div>
 
       <div class="menu-grid">
         <button class="menu-btn special" onclick="openInterviewTest()">
@@ -54,6 +62,8 @@
       </div>
 
       <div id="checklistResult"></div>
+      <!-- НОВОЕ: блок аудита для стажировки -->
+      <div id="checklistAuditBlock" style="display: none; margin-top: 20px;"></div>
     </div>
 
     <!-- ТЕСТ ДЛЯ КАНДИДАТОВ -->
@@ -70,6 +80,8 @@
       </div>
 
       <div id="interviewResult"></div>
+      <!-- НОВОЕ: блок кадрового аудита -->
+      <div id="auditBlock" style="display: none; margin-top: 20px;"></div>
     </div>
   </main>
 
@@ -79,4 +91,5 @@
   <script src="js/interview.js"></script>
   <script src="js/main.js"></script>
 </body>
+
 </html>

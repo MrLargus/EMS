@@ -357,3 +357,51 @@ button.gen-btn:hover {
   text-transform: lowercase;
   letter-spacing: 0.3px;
 }
+
+/* ===== Поле куратора на главной ===== */
+.curator-input-group {
+  max-width: 400px;
+  margin: 0 auto 30px auto;
+  text-align: left;
+  background: #ffffff;
+  padding: 20px;
+  border: 1px solid #dce1e6;
+  border-top: 4px solid #1a3a6c;
+  border-radius: 3px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.curator-input-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.curator-input-group input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #bdc3c7;
+  border-radius: 3px;
+  background: #fafbfc;
+  transition: border 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+  color: #1a3a6c; /* Синий текст для акцента */
+  font-weight: 600;
+}
+
+.curator-input-group input:focus {
+  outline: none;
+  border-color: #1a3a6c;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(26, 58, 108, 0.1);
+}
+
+.curator-input-group input::placeholder {
+  color: #a0a8b3;
+  font-weight: 400;
+}
