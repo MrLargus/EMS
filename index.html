@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <!-- ЧЕК-ЛИСТ СТАЖИРОВКИ -->
+        <!-- ЧЕК-ЛИСТ СТАЖИРОВКИ -->
     <div id="checklistWrapper" style="display: none;">
       <button class="back-btn" onclick="goToMenu()">← Вернуться в главное меню</button>
       <h1>Чек-лист стажировки интерна</h1>
@@ -67,13 +67,24 @@
       <form id="checklistForm"></form>
 
       <div class="form-actions">
-        <button onclick="checkChecklist()">Завершить стажировку</button>
+        <button onclick="startExam()">📝 Провести экзамен</button>
         <button class="secondary" onclick="resetChecklist()">Очистить форму</button>
       </div>
 
       <div id="checklistResult"></div>
-      <!-- Блок аудита для стажировки -->
-      <div id="checklistAuditBlock" style="display: none; margin-top: 20px;"></div>
+
+      <!-- Блок экзамена (появляется после нажатия "Провести экзамен") -->
+      <div id="examBlock" style="display: none; margin-top: 30px;">
+        <h2 style="color: #1a3a6c; text-align: center;">Экзамен по чек-листу</h2>
+        <div id="examQuestionsContainer"></div>
+        <div class="form-actions" style="margin-top: 20px;">
+          <button onclick="checkExam()">Завершить экзамен</button>
+        </div>
+        <div id="examResult"></div>
+      </div>
+
+      <!-- Финальный блок аудита (появляется после завершения экзамена) -->
+      <div id="finalAuditBlock" style="display: none; margin-top: 30px;"></div>
     </div>
 
     <!-- ТЕСТ ДЛЯ КАНДИДАТОВ -->
@@ -101,8 +112,7 @@
   <script src="js/interview.js"></script>
   <script src="js/main.js"></script>
 
-  <script data-goatcounter="https://mrlargus.goatcounter.com/count"
- async src="//gc.zgo.at/count.js"></script>
+  <script data-goatcounter="https://mrlargus.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 
 </html>
