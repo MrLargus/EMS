@@ -8,7 +8,9 @@ let medicalQuestionsAdded = 0;
 const MAX_EXTRA_QUESTIONS = 3;
 const MAX_MEDICAL_QUESTIONS = 3;
 const MAIN_QUESTIONS_COUNT = 5;
-const FIXED_FIRST_INDEX = 0; // Индекс фиксированного первого вопроса в riddleQuestions
+const FIXED_FIRST_INDEX = 0;
+
+const INTERVIEW_STORAGE_KEY = 'ems_interview_progress';
 
 function openInterviewTest() {
     document.getElementById('startScreen').style.display = 'none';
@@ -16,6 +18,7 @@ function openInterviewTest() {
     document.getElementById('interviewWrapper').style.display = 'block';
 
     buildInterviewQuiz();
+    restoreInterviewProgress();
     window.scrollTo(0, 0);
 }
 
@@ -26,7 +29,6 @@ function buildInterviewQuiz() {
     extraQuestionsAdded = 0;
     medicalQuestionsAdded = 0;
 
-    // === Основные 5 вопросов ===
     selectedQuizQuestions = buildMainQuestions();
 
     interviewStructure.forEach((section, si) => {
@@ -39,17 +41,8 @@ function buildInterviewQuiz() {
             section.items.forEach((item, ii) => {
                 const label = document.createElement('label');
                 label.className = 'answer';
-                label.style.display = 'flex';
-                label.style.alignItems = 'flex-start';
-                label.style.gap = '12px';
-                label.style.margin = '8px 0';
-                label.style.padding = '14px';
-                label.style.background = '#f8fafc';
-                label.style.border = '1px solid #dce1e6';
-                label.style.borderRadius = '4px';
-                label.style.cursor = 'pointer';
                 label.innerHTML = `
-          <input type="checkbox" name="chk_${si}_${ii}" style="width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; accent-color: #1a3a6c;">
+          <input type="checkbox" name="chk_${si}_${ii}">
           <span>${item}</span>
         `;
                 form.appendChild(label);
@@ -95,7 +88,7 @@ function createQuestionElement(q, index) {
     let html = `<h3>${index + 1}. ${q.text}</h3>`;
     q.answers.forEach((a, ai) => {
         html += `<label class="answer">
-      <input type="radio" name="quiz_${index}" value="${ai}" style="width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; accent-color: #1a3a6c;">
+      <input type="radio" name="quiz_${index}" value="${ai}">
       <span>${a}</span>
     </label>`;
     });
@@ -103,26 +96,21 @@ function createQuestionElement(q, index) {
     return div;
 }
 
-// === Основные вопросы: 1 фикс + 4 рандом (не медицина) ===
 function buildMainQuestions() {
     const result = [];
-
-    // 1. Фиксированный первый вопрос
     const fixedQuestion = riddleQuestions[FIXED_FIRST_INDEX];
     result.push(fixedQuestion);
     const usedIndices = new Set([FIXED_FIRST_INDEX]);
 
-    // 2. Группируем остальные вопросы по блокам, исключая медицину и уже использованный фикс
     const groups = {};
     riddleQuestions.forEach((q, i) => {
-        if (i === FIXED_FIRST_INDEX) return;              // уже использован
-        if (q.block.includes('Знание медицины')) return;  // медицину выносим отдельно
+        if (i === FIXED_FIRST_INDEX) return;
+        if (q.block.includes('Знание медицины')) return;
         const key = q.block;
         if (!groups[key]) groups[key] = [];
         groups[key].push({ q, idx: i });
     });
 
-    // 3. Берём по одному случайному из каждого блока
     Object.keys(groups).forEach(key => {
         const arr = groups[key];
         const pick = arr[Math.floor(Math.random() * arr.length)];
@@ -130,7 +118,6 @@ function buildMainQuestions() {
         usedIndices.add(pick.idx);
     });
 
-    // 4. Если получилось меньше 5 (например, блоков мало), добираем из остальных не-медицинских
     if (result.length < MAIN_QUESTIONS_COUNT) {
         const extraPool = riddleQuestions
             .map((q, i) => ({ q, idx: i }))
@@ -143,13 +130,11 @@ function buildMainQuestions() {
         }
     }
 
-    // 5. Перемешиваем вопросы начиная со 2-го (первый остаётся фиксированным)
     const tail = result.slice(1);
     const shuffledTail = shuffleArray(tail);
     return [result[0], ...shuffledTail].slice(0, MAIN_QUESTIONS_COUNT);
 }
 
-// Возвращает Set индексов уже заданных вопросов (основные + доп)
 function getUsedQuestionIndices() {
     const used = new Set();
     selectedQuizQuestions.forEach(q => {
@@ -159,10 +144,9 @@ function getUsedQuestionIndices() {
     return used;
 }
 
-// === Кнопка "Дополнительный вопрос" (не медицина) ===
 function addExtraQuestion() {
     if (extraQuestionsAdded >= MAX_EXTRA_QUESTIONS) {
-        alert(`Больше ${MAX_EXTRA_QUESTIONS} дополнительных вопросов задавать нельзя.`);
+        showToast(`Больше ${MAX_EXTRA_QUESTIONS} дополнительных вопросов задавать нельзя.`, 'error');
         return;
     }
 
@@ -173,7 +157,7 @@ function addExtraQuestion() {
         .map(item => item.idx);
 
     if (availableIndices.length === 0) {
-        alert('Все дополнительные вопросы (кроме медицины) уже заданы.');
+        showToast('Все дополнительные вопросы (кроме медицины) уже заданы.', 'info');
         return;
     }
 
@@ -184,12 +168,12 @@ function addExtraQuestion() {
 
     appendQuestionToContainer(newQuestion, selectedQuizQuestions.length - 1);
     updateExtraButtonsVisibility();
+    saveInterviewProgress();
 }
 
-// === Кнопка "Вопрос на знание медицины" ===
 function addMedicalQuestion() {
     if (medicalQuestionsAdded >= MAX_MEDICAL_QUESTIONS) {
-        alert(`Больше ${MAX_MEDICAL_QUESTIONS} медицинских вопросов задавать нельзя.`);
+        showToast(`Больше ${MAX_MEDICAL_QUESTIONS} медицинских вопросов задавать нельзя.`, 'error');
         return;
     }
 
@@ -200,7 +184,7 @@ function addMedicalQuestion() {
         .map(item => item.idx);
 
     if (availableIndices.length === 0) {
-        alert('Все медицинские вопросы уже заданы.');
+        showToast('Все медицинские вопросы уже заданы.', 'info');
         return;
     }
 
@@ -211,6 +195,7 @@ function addMedicalQuestion() {
 
     appendQuestionToContainer(newQuestion, selectedQuizQuestions.length - 1);
     updateExtraButtonsVisibility();
+    saveInterviewProgress();
 }
 
 function appendQuestionToContainer(q, index) {
@@ -223,7 +208,6 @@ function appendQuestionToContainer(q, index) {
     }, 50);
 }
 
-// === Управление видимостью кнопок ===
 function updateExtraButtonsVisibility() {
     const extraBtn = document.getElementById('extraQuestionBtn');
     const medBtn = document.getElementById('medicalQuestionBtn');
@@ -234,7 +218,6 @@ function updateExtraButtonsVisibility() {
     const percent = (Math.min(correctCount, MAIN_QUESTIONS_COUNT) / MAIN_QUESTIONS_COUNT) * 100;
     const showAnyButton = percent < 80;
 
-    // Есть ли ещё не-медицинские вопросы
     const usedIndices = getUsedQuestionIndices();
     const hasExtra = riddleQuestions.some(
         (q, i) => !usedIndices.has(i) && !q.block.includes('Знание медицины')
@@ -358,7 +341,6 @@ function checkInterview() {
 
     currentInterviewResult = { checklistScore, checklistTotal, finalQuizScore, quizTotal, totalScore, totalItems, rule };
 
-    // НОВОЕ: показать блок кадрового аудита
     renderAuditBlock();
 }
 
@@ -366,19 +348,16 @@ function resetInterview() {
     document.querySelectorAll('#interviewQuiz input[type="checkbox"]').forEach(cb => cb.checked = false);
     document.querySelectorAll('#interviewQuiz input[type="radio"]').forEach(rb => rb.checked = false);
 
-    // Очищаем и сбрасываем стили у результата собеседования
     const interviewResultEl = document.getElementById('interviewResult');
     interviewResultEl.innerHTML = '';
     interviewResultEl.removeAttribute('style');
 
-    // Очищаем и сбрасываем стили у результата теста (вопросов)
     const quizResultEl = document.getElementById('quizResult');
     if (quizResultEl) {
         quizResultEl.innerHTML = '';
         quizResultEl.removeAttribute('style');
     }
 
-    // Скрываем блок аудита
     const auditBlock = document.getElementById('auditBlock');
     if (auditBlock) {
         auditBlock.innerHTML = '';
@@ -391,11 +370,10 @@ function resetInterview() {
     extraQuestionsAdded = 0;
     medicalQuestionsAdded = 0;
 
+    clearInterviewProgress();
     buildInterviewQuiz();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-// ===== КАДРОВЫЙ АУДИТ =====
 
 function renderAuditBlock() {
     const auditBlock = document.getElementById('auditBlock');
@@ -411,7 +389,6 @@ function renderAuditBlock() {
             📋 Скопировать шаблон
           </button>
         </div>
-        <div id="copyStatus" class="copy-status"></div>
       </div>
     `;
     auditBlock.style.display = 'block';
@@ -435,7 +412,6 @@ function copyAuditText() {
 
     copyText(text, '✅ Шаблон скопирован в буфер обмена!');
 
-    // Очищаем форму после копирования (с задержкой, чтобы увидеть уведомление)
     setTimeout(() => {
         resetInterview();
     }, 1500);
@@ -448,3 +424,80 @@ function shuffleArray(array) {
     }
     return array;
 }
+
+function saveInterviewProgress() {
+    const checks = {};
+    document.querySelectorAll('#interviewQuiz input[type="checkbox"]').forEach(cb => {
+        checks[cb.name] = cb.checked;
+    });
+
+    const radios = {};
+    document.querySelectorAll('#interviewQuiz input[type="radio"]:checked').forEach(rb => {
+        radios[rb.name] = rb.value;
+    });
+
+    const state = {
+        questionIndices: selectedQuizQuestions.map(q => riddleQuestions.indexOf(q)),
+        extraQuestionsAdded,
+        medicalQuestionsAdded,
+        checks,
+        radios
+    };
+
+    try {
+        localStorage.setItem(INTERVIEW_STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* ignore */ }
+}
+
+function restoreInterviewProgress() {
+    let saved = null;
+    try { saved = localStorage.getItem(INTERVIEW_STORAGE_KEY); } catch (e) { return; }
+    if (!saved) return;
+
+    let state;
+    try { state = JSON.parse(saved); } catch (e) { return; }
+
+    if (Array.isArray(state.questionIndices) && state.questionIndices.length > 0) {
+        const restored = state.questionIndices
+            .map(idx => riddleQuestions[idx])
+            .filter(Boolean);
+        if (restored.length === state.questionIndices.length) {
+            selectedQuizQuestions = restored;
+            extraQuestionsAdded = state.extraQuestionsAdded || 0;
+            medicalQuestionsAdded = state.medicalQuestionsAdded || 0;
+
+            const quizContainer = document.getElementById('quizQuestionsContainer');
+            if (quizContainer) {
+                quizContainer.innerHTML = '';
+                selectedQuizQuestions.forEach((q, qi) => {
+                    quizContainer.appendChild(createQuestionElement(q, qi));
+                });
+            }
+        }
+    }
+
+    if (state.checks) {
+        Object.entries(state.checks).forEach(([name, checked]) => {
+            const cb = document.querySelector(`#interviewQuiz input[name="${name}"]`);
+            if (cb) cb.checked = !!checked;
+        });
+    }
+
+    if (state.radios) {
+        Object.entries(state.radios).forEach(([name, value]) => {
+            const rb = document.querySelector(`#interviewQuiz input[name="${name}"][value="${value}"]`);
+            if (rb) rb.checked = true;
+        });
+    }
+}
+
+function clearInterviewProgress() {
+    try { localStorage.removeItem(INTERVIEW_STORAGE_KEY); } catch (e) {}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('interviewQuiz');
+    if (form) {
+        form.addEventListener('change', saveInterviewProgress);
+    }
+});

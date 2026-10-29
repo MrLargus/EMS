@@ -1,4 +1,5 @@
 let examPassed = false;
+const CHECKLIST_STORAGE_KEY = 'ems_checklist_progress';
 
 function openChecklist() {
   document.getElementById('startScreen').style.display = 'none';
@@ -13,6 +14,7 @@ function openChecklist() {
 
   buildChecklist();
   examPassed = false;
+  restoreChecklistProgress();
   window.scrollTo(0, 0);
 }
 
@@ -29,17 +31,8 @@ function buildChecklist() {
     block.items.forEach((item, ii) => {
       const label = document.createElement('label');
       label.className = 'answer';
-      label.style.display = 'flex';
-      label.style.alignItems = 'flex-start';
-      label.style.gap = '12px';
-      label.style.margin = '8px 0';
-      label.style.padding = '14px';
-      label.style.background = '#f8fafc';
-      label.style.border = '1px solid #dce1e6';
-      label.style.borderRadius = '4px';
-      label.style.cursor = 'pointer';
       label.innerHTML = `
-        <input type="checkbox" name="chk_${bi}_${ii}" style="width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; accent-color: #1a3a6c;">
+        <input type="checkbox" name="chk_${bi}_${ii}">
         <span>${item}</span>
       `;
       form.appendChild(label);
@@ -47,13 +40,10 @@ function buildChecklist() {
   });
 }
 
-// ===== ЭКЗАМЕН =====
-
 function startExam() {
   const examBlock = document.getElementById('examBlock');
   if (!examBlock) return;
 
-  // Проверка чек-листа убрана — экзамен запускается сразу
   examBlock.style.display = 'block';
   buildExamQuestions();
   examBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -73,12 +63,12 @@ function buildExamQuestions() {
     q.answers.forEach((a, ai) => {
       if (isMultiple) {
         html += `<label class="answer">
-          <input type="checkbox" name="exam_${qi}_${ai}" value="${ai}" style="width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; accent-color: #1a3a6c;">
+          <input type="checkbox" name="exam_${qi}_${ai}" value="${ai}">
           <span>${a}</span>
         </label>`;
       } else {
         html += `<label class="answer">
-          <input type="radio" name="exam_${qi}" value="${ai}" style="width: 18px; height: 18px; flex-shrink: 0; margin-top: 3px; accent-color: #1a3a6c;">
+          <input type="radio" name="exam_${qi}" value="${ai}">
           <span>${a}</span>
         </label>`;
       }
@@ -99,18 +89,14 @@ function checkExam() {
   examQuestions.forEach((q, qi) => {
     const isMultiple = q.type === 'multiple';
     const correctSet = new Set(q.correct);
-    totalPoints += correctSet.size; // каждый правильный вариант = 1 балл
+    totalPoints += correctSet.size;
 
     if (isMultiple) {
-      // Множественный выбор: считаем только правильные отмеченные чекбоксы
       q.answers.forEach((_, ai) => {
         const cb = document.querySelector(`input[name="exam_${qi}_${ai}"]`);
-        if (cb && cb.checked && correctSet.has(ai)) {
-          correctPoints++;
-        }
+        if (cb && cb.checked && correctSet.has(ai)) correctPoints++;
       });
     } else {
-      // Одиночный выбор: проверяем, что выбран ровно один правильный
       const checked = document.querySelector(`input[name="exam_${qi}"]:checked`);
       if (checked) {
         const selected = parseInt(checked.value);
@@ -144,15 +130,12 @@ function checkExam() {
 
   examPassed = passed;
 
-  // Показываем финальный блок в любом случае (сдан или не сдан)
   const finalBlock = document.getElementById('finalAuditBlock');
   if (finalBlock) {
     finalBlock.style.display = 'block';
     renderFinalAuditBlock();
   }
 }
-
-// ===== ФИНАЛЬНЫЙ АУДИТ =====
 
 function renderFinalAuditBlock() {
   const auditBlock = document.getElementById('finalAuditBlock');
@@ -168,7 +151,6 @@ function renderFinalAuditBlock() {
           📋 Скопировать шаблон
         </button>
       </div>
-      <div id="copyStatus" class="copy-status"></div>
     </div>
   `;
   auditBlock.style.display = 'block';
@@ -195,7 +177,6 @@ function copyChecklistAuditText() {
   });
   const traineesString = trainees.join(' ');
 
-  // Динамический статус на основе результата экзамена
   const examStatus = examPassed ? 'сдан' : 'не сдан';
   const positionLine = examPassed
     ? 'Переведён на должность: Мл. Фельдшер'
@@ -240,10 +221,10 @@ function resetChecklist() {
   }
 
   examPassed = false;
+  clearChecklistProgress();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ===== ФУНКЦИИ УПРАВЛЕНИЯ СТАЖЁРАМИ =====
 const MAX_TRAINEES = 3;
 
 function addTraineeInput() {
@@ -252,7 +233,7 @@ function addTraineeInput() {
 
   const currentCount = container.querySelectorAll('.trainee-row').length;
   if (currentCount >= MAX_TRAINEES) {
-    alert(`Максимум ${MAX_TRAINEES} стажёра за раз.`);
+    showToast(`Максимум ${MAX_TRAINEES} стажёра за раз.`, 'error');
     return;
   }
 
@@ -286,3 +267,60 @@ function updateAddBtnVisibility() {
   const currentCount = container.querySelectorAll('.trainee-row').length;
   btn.style.display = currentCount >= MAX_TRAINEES ? 'none' : 'flex';
 }
+
+function saveChecklistProgress() {
+  const checkboxes = {};
+  document.querySelectorAll('#checklistForm input[type="checkbox"]').forEach(cb => {
+    checkboxes[cb.name] = cb.checked;
+  });
+
+  const trainees = [];
+  document.querySelectorAll('.trainee-row input').forEach(inp => {
+    trainees.push(inp.value);
+  });
+
+  const state = { checkboxes, trainees, examPassed };
+
+  try {
+    localStorage.setItem(CHECKLIST_STORAGE_KEY, JSON.stringify(state));
+  } catch (e) { /* ignore */ }
+}
+
+function restoreChecklistProgress() {
+  let saved = null;
+  try { saved = localStorage.getItem(CHECKLIST_STORAGE_KEY); } catch (e) { return; }
+  if (!saved) return;
+
+  let state;
+  try { state = JSON.parse(saved); } catch (e) { return; }
+
+  if (state.checkboxes) {
+    Object.entries(state.checkboxes).forEach(([name, checked]) => {
+      const cb = document.querySelector(`#checklistForm input[name="${name}"]`);
+      if (cb) cb.checked = !!checked;
+    });
+  }
+
+  if (Array.isArray(state.trainees) && state.trainees.length > 0) {
+    const container = document.getElementById('traineeInputsContainer');
+    if (container) {
+      container.innerHTML = '';
+      state.trainees.forEach(val => {
+        addTraineeInput();
+        const inputs = container.querySelectorAll('.trainee-row input');
+        inputs[inputs.length - 1].value = val;
+      });
+    }
+  }
+}
+
+function clearChecklistProgress() {
+  try { localStorage.removeItem(CHECKLIST_STORAGE_KEY); } catch (e) {}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('checklistForm');
+  if (form) form.addEventListener('change', saveChecklistProgress);
+  const traineesContainer = document.getElementById('traineeInputsContainer');
+  if (traineesContainer) traineesContainer.addEventListener('input', saveChecklistProgress);
+});

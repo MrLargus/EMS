@@ -4,23 +4,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>|EMS| Портал стажировки и собеседований</title>
+  <title>EMS HRID | Портал стажировки и собеседований</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
   <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/portal.css">
+  <link rel="stylesheet" href="css/themes.css">
   <link rel="stylesheet" href="css/form.css">
   <link rel="stylesheet" href="css/result.css">
-  <link rel="stylesheet" href="css/certificate.css">
+
+  <style>
+    html { transition: none; }
+  </style>
+  <script src="js/theme-init.js"></script>
 </head>
 
-<body>
+<body class="theme-light">
 
+  <!-- ===== TOPBAR ===== -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <span class="topbar-left">EMS // DOC: HRID · TRAINING & INTERVIEW</span>
+      <span class="topbar-right">
+        <span class="status-dot"></span> INTERNAL
+        <span class="topbar-divider">|</span>
+        <span id="topbar-date">—</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ===== HEADER ===== -->
   <header class="ems-header">
     <div class="ems-header-inner">
-      <img src="assets/logo-star.svg" alt="EMS" class="ems-logo">
-      <div class="ems-header-text">
-        <span class="ems-title">Emergency Medical Service</span>
-        <span class="ems-subtitle">Отдел кадров и стажировки</span>
-      </div>
+      <a href="index.html" class="brand">
+        <img src="assets/logo-star.svg" alt="EMS" class="ems-logo">
+        <div class="ems-header-text">
+          <span class="ems-title">EMERGENCY MEDICAL SERVICE</span>
+          <span class="ems-subtitle">Отдел кадров и стажировки — HRID</span>
+        </div>
+      </a>
+      <button id="themeToggle" class="theme-toggle" title="Переключить тему" aria-label="Переключить тему">
+        <span class="theme-icon-light">☀</span>
+        <span class="theme-icon-dark">☾</span>
+      </button>
     </div>
   </header>
 
@@ -50,9 +76,9 @@
       </div>
     </div>
 
-        <!-- ЧЕК-ЛИСТ СТАЖИРОВКИ -->
+    <!-- ЧЕК-ЛИСТ СТАЖИРОВКИ -->
     <div id="checklistWrapper" style="display: none;">
-      <button class="back-btn" onclick="goToMenu()">← Вернуться в главное меню</button>
+      <button class="back-btn" onclick="goToMenu()">⬅ Вернуться в главное меню</button>
       <h1>Чек-лист стажировки интерна</h1>
       <div class="subtitle">Отметьте выполненные пункты</div>
 
@@ -73,9 +99,9 @@
 
       <div id="checklistResult"></div>
 
-      <!-- Блок экзамена (появляется после нажатия "Провести экзамен") -->
+      <!-- Блок экзамена -->
       <div id="examBlock" style="display: none; margin-top: 30px;">
-        <h2 style="color: #1a3a6c; text-align: center;">Экзамен по чек-листу</h2>
+        <h2 style="color: var(--accent); text-align: center; font-family: var(--mono); text-transform: uppercase; letter-spacing: 1.5px;">Экзамен по чек-листу</h2>
         <div id="examQuestionsContainer"></div>
         <div class="form-actions" style="margin-top: 20px;">
           <button onclick="checkExam()">Завершить экзамен</button>
@@ -83,13 +109,13 @@
         <div id="examResult"></div>
       </div>
 
-      <!-- Финальный блок аудита (появляется после завершения экзамена) -->
+      <!-- Финальный блок аудита -->
       <div id="finalAuditBlock" style="display: none; margin-top: 30px;"></div>
     </div>
 
     <!-- ТЕСТ ДЛЯ КАНДИДАТОВ -->
     <div id="interviewWrapper" style="display: none;">
-      <button class="back-btn" onclick="goToMenu()">← Вернуться в главное меню</button>
+      <button class="back-btn" onclick="goToMenu()">⬅ Вернуться в главное меню</button>
       <h1>Собеседование</h1>
       <div class="subtitle">Отметьте выполненные пункты и ответьте на вопросы</div>
 
@@ -101,16 +127,35 @@
       </div>
 
       <div id="interviewResult"></div>
-      <!-- Блок кадрового аудита -->
       <div id="auditBlock" style="display: none; margin-top: 20px;"></div>
     </div>
   </main>
 
+  <!-- ===== FOOTER ===== -->
+  <footer class="ems-footer">
+    <div class="footer-inner">
+      <span>© EMS SAN-ANDREAS — DEPARTMENT OF HEALTH</span>
+      <span>INTERNAL USE ONLY // НЕ ДЛЯ ГРАЖДАНСКИХ</span>
+    </div>
+  </footer>
+
   <script src="js/data.js"></script>
   <script src="js/utils.js"></script>
+  <script src="js/tabs.js"></script>
   <script src="js/checklist.js"></script>
   <script src="js/interview.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/theme.js"></script>
+  <script>
+    (function () {
+      const el = document.getElementById('topbar-date');
+      if (el) {
+        const d = new Date();
+        const p = n => String(n).padStart(2, '0');
+        el.textContent = `${p(d.getDate())}.${p(d.getMonth() + 1)}.${d.getFullYear()} // ${p(d.getHours())}:${p(d.getMinutes())}`;
+      }
+    })();
+  </script>
 
   <script data-goatcounter="https://mrlargus.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
