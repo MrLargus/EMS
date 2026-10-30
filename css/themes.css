@@ -25,7 +25,7 @@ body.theme-light {
   --red-soft:      #ffebee;
   --amber:         #f0a500;
 
-  --mono:          'JetBrains Mono', 'Courier New', monospace;
+  --mono:          'Inter', 'Segoe UI', -apple-system, Arial, sans-serif;
 
   --page-bg: #f0f2f5;
 
