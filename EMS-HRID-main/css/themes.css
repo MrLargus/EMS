@@ -1,0 +1,477 @@
+/* =========================================================
+   ТЕМЫ: EMS TACTICAL (светлая) + HIGH-TECH (тёмная)
+   ========================================================= */
+
+/* ---------- Переменные светлой темы (по умолчанию) ---------- */
+:root,
+body.theme-light {
+  --bg:            #f0f2f5;
+  --panel:         #ffffff;
+  --panel-soft:    #f8f9fa;
+  --border:        #b0bec5;
+  --border-soft:   #cfd8dc;
+  --text:          #1a2332;
+  --text-dim:      #546e7a;
+  --text-faint:    #90a4ae;
+
+  --accent:        #00468b;
+  --accent-soft:   #e3ecf5;
+  --accent-dim:    #003366;
+  --accent-dark:   #002244;
+
+  --teal:          #00897b;
+  --teal-soft:     #e0f2f1;
+  --red:           #d32f2f;
+  --red-soft:      #ffebee;
+  --amber:         #f0a500;
+
+  --mono:          'Inter', 'Segoe UI', -apple-system, Arial, sans-serif;
+
+  --page-bg: #f0f2f5;
+
+  --shadow-sm: 0 1px 0 rgba(0,0,0,0.05);
+  --shadow-md: 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-lg: 0 4px 12px rgba(0, 70, 139, 0.15);
+}
+
+/* ---------- Переменные тёмной темы ---------- */
+body.theme-dark {
+  --bg:            #0b1320;
+  --panel:         #111b2b;
+  --panel-soft:    #162338;
+  --border:        rgba(0, 229, 255, 0.3);
+  --border-soft:   rgba(0, 229, 255, 0.1);
+  --text:          #e0f2fe;
+  --text-dim:      #94a3b8;
+  --text-faint:    #64748b;
+
+  --accent:        #00e5ff;
+  --accent-soft:   rgba(0, 229, 255, 0.1);
+  --accent-dim:    #00b8cc;
+  --accent-dark:   #008a99;
+
+  --teal:          #00e5ff;
+  --teal-soft:     rgba(0, 229, 255, 0.1);
+  --red:           #ff6b6b;
+  --red-soft:      rgba(255, 107, 107, 0.15);
+  --amber:         #fbbf24;
+
+  --page-bg: radial-gradient(circle at top center, #162a45 0%, #0b1320 100%);
+
+  --shadow-sm: 0 0 10px rgba(0, 229, 255, 0.05);
+  --shadow-md: 0 0 20px rgba(0, 229, 255, 0.1);
+  --shadow-lg: 0 0 30px rgba(0, 229, 255, 0.2);
+
+  color: var(--text);
+}
+
+/* =========================================================
+   EMS TACTICAL — строгая геометрия
+   ========================================================= */
+body.theme-light .portal-card,
+body.theme-light .page-content,
+body.theme-light .doc-block,
+body.theme-light .doc-tab,
+body.theme-light .patient-fields,
+body.theme-light .question,
+body.theme-light .audit-card,
+body.theme-light .menu-btn,
+body.theme-light .modal-content,
+body.theme-light button,
+body.theme-light input,
+body.theme-light .info-box,
+body.theme-light .warning-box,
+body.theme-light .curator-input-group {
+  border-radius: 0px !important;
+}
+
+body.theme-light .portal-card { border: 1px solid var(--border) !important; }
+body.theme-light .portal-card::before { height: 6px !important; border-radius: 0 !important; }
+body.theme-light .portal-card:hover {
+  border-color: var(--accent) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+body.theme-light .ems-title,
+body.theme-light h1,
+body.theme-light h2,
+body.theme-light h3,
+body.theme-light .card-title,
+body.theme-light .block-title,
+body.theme-light .modal-content h2 {
+  font-family: 'Inter', sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  font-weight: 800 !important;
+}
+body.theme-light .ems-title { color: var(--accent) !important; }
+
+body.theme-light .form-actions button:first-child,
+body.theme-light button.gen-btn,
+body.theme-light .modal-btn-primary {
+  background: var(--accent) !important;
+  border-radius: 0 !important;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 2px solid var(--accent) !important;
+  color: #fff !important;
+}
+body.theme-light .form-actions button:first-child:hover,
+body.theme-light button.gen-btn:hover,
+body.theme-light .modal-btn-primary:hover {
+  background: var(--accent-dim) !important;
+  border-color: var(--accent-dim) !important;
+}
+
+body.theme-light .warning-box {
+  border-left-color: #d32f2f !important;
+  background: #ffebee !important;
+  color: #b71c1c !important;
+}
+body.theme-light .block-title { background: #1a2332 !important; color: #fff !important; }
+body.theme-light .patient-fields input:focus,
+body.theme-light .curator-input-group input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(0, 70, 139, 0.2) !important;
+}
+
+/* =========================================================
+   HIGH-TECH MEDICAL — ночная тема
+   ========================================================= */
+body.theme-dark .topbar,
+body.theme-dark .ems-header,
+body.theme-dark .ems-footer {
+  background: rgba(11, 19, 32, 0.9) !important;
+  border-color: var(--border) !important;
+}
+body.theme-dark .ems-title {
+  color: var(--accent) !important;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+}
+body.theme-dark .topbar-left { color: var(--accent); }
+body.theme-dark .ems-subtitle { color: var(--text-dim) !important; }
+
+/* Свечение логотипа в тёмной теме */
+body.theme-dark .ems-logo {
+  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6)) 
+          drop-shadow(0 0 20px rgba(0, 229, 255, 0.3));
+  transition: filter 0.4s ease;
+}
+body.theme-light .ems-logo {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  transition: filter 0.4s ease;
+}
+
+body.theme-dark .portal-card {
+  background: var(--panel) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: inset 0 0 20px rgba(0, 229, 255, 0.03);
+  border-radius: 8px !important;
+}
+body.theme-dark .portal-card::before {
+  background: var(--accent) !important;
+  box-shadow: 0 0 10px var(--accent);
+}
+body.theme-dark .portal-card:hover {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.2) !important;
+}
+body.theme-dark .card-title,
+body.theme-dark .card-code { color: var(--accent) !important; }
+body.theme-dark .card-tag {
+  background: var(--panel-soft) !important;
+  color: var(--accent) !important;
+  border-color: var(--border) !important;
+}
+body.theme-dark .card-desc { color: var(--text-dim) !important; }
+body.theme-dark .hero h1 { color: var(--text) !important; }
+body.theme-dark .hero h1 .accent { color: var(--accent) !important; }
+body.theme-dark .hero-desc { color: var(--text-dim) !important; }
+body.theme-dark .hero-stats { background: var(--panel) !important; border-color: var(--border) !important; }
+body.theme-dark .stat-num { color: var(--accent) !important; }
+body.theme-dark .stat-lbl { color: var(--text-faint) !important; }
+body.theme-dark .stat { border-right-color: var(--border) !important; }
+body.theme-dark .section-head { border-bottom-color: var(--border) !important; }
+body.theme-dark .section-head h2 { color: var(--text) !important; }
+body.theme-dark .section-index { color: var(--text-faint) !important; }
+
+body.theme-dark .page-content,
+body.theme-dark .doc-block,
+body.theme-dark .doc-tab,
+body.theme-dark .patient-fields,
+body.theme-dark .question,
+body.theme-dark .audit-card,
+body.theme-dark .modal-content,
+body.theme-dark .menu-btn {
+  background: var(--panel) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+body.theme-dark .page-content h1,
+body.theme-dark .page-content h2,
+body.theme-dark .doc-tab .tab-code,
+body.theme-dark .item-title,
+body.theme-dark .menu-btn .btn-title,
+body.theme-dark .modal-content h2 {
+  color: var(--accent) !important;
+}
+body.theme-dark .page-content p,
+body.theme-dark .page-content li,
+body.theme-dark .item-text,
+body.theme-dark .page-content td {
+  color: var(--text-dim) !important;
+}
+body.theme-dark .page-content strong { color: var(--accent) !important; }
+body.theme-dark .page-content a { color: var(--accent) !important; border-bottom-color: var(--accent) !important; }
+body.theme-dark .page-content code {
+  background: rgba(0, 229, 255, 0.1) !important;
+  color: var(--accent) !important;
+}
+
+body.theme-dark .page-content th {
+  background: rgba(0, 229, 255, 0.15) !important;
+  color: var(--accent) !important;
+  border-bottom: 2px solid var(--accent);
+}
+body.theme-dark .page-content td { border-bottom-color: var(--border-soft) !important; }
+body.theme-dark .page-content tr:nth-child(even) td { background: var(--panel-soft) !important; }
+body.theme-dark .page-content tr:hover td { background: rgba(0, 229, 255, 0.05) !important; }
+
+body.theme-dark .info-box {
+  background: rgba(0, 229, 255, 0.05) !important;
+  border-left: 4px solid var(--accent) !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+body.theme-dark .info-box strong { color: var(--accent) !important; }
+body.theme-dark .warning-box {
+  background: rgba(245, 127, 23, 0.1) !important;
+  border-left-color: #f57f17 !important;
+  color: #fbbf24 !important;
+}
+
+/* =========================================================
+   ГЛОБАЛЬНЫЕ КНОПКИ В ТЁМНОЙ ТЕМЕ
+   ========================================================= */
+body.theme-dark button:not(.back-btn):not(.theme-toggle):not(.remove-trainee):not(.menu-btn),
+body.theme-dark .form-actions button:first-child,
+body.theme-dark button.gen-btn,
+body.theme-dark .modal-btn-primary {
+  background: var(--accent) !important;
+  color: #000 !important;
+  font-weight: 800;
+  border: none;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3) !important;
+}
+body.theme-dark button:not(.back-btn):not(.theme-toggle):not(.remove-trainee):not(.menu-btn):hover,
+body.theme-dark .form-actions button:first-child:hover,
+body.theme-dark button.gen-btn:hover,
+body.theme-dark .modal-btn-primary:hover {
+  background: #fff !important;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.6) !important;
+}
+body.theme-dark button.secondary {
+  background: transparent !important;
+  color: var(--accent) !important;
+  border: 1px solid var(--accent) !important;
+  box-shadow: none !important;
+}
+
+body.theme-dark label.answer {
+  background: var(--panel-soft) !important;
+  border-color: var(--border-soft) !important;
+  color: var(--text) !important;
+}
+body.theme-dark label.answer:hover {
+  border-color: var(--accent) !important;
+  background: rgba(0, 229, 255, 0.05) !important;
+}
+body.theme-dark input[type="checkbox"],
+body.theme-dark input[type="radio"] { accent-color: var(--accent) !important; }
+
+body.theme-dark input[type="text"],
+body.theme-dark input[type="password"],
+body.theme-dark .modal-input,
+body.theme-dark .curator-input-group input,
+body.theme-dark .patient-fields input {
+  background: var(--bg) !important;
+  color: var(--accent) !important;
+  border-color: var(--border) !important;
+}
+body.theme-dark input:focus,
+body.theme-dark .modal-input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2) !important;
+}
+
+body.theme-dark .doc-block .block-header {
+  background: linear-gradient(90deg, #00566b 0%, rgba(0, 229, 255, 0) 100%) !important;
+}
+body.theme-dark .doc-tab.active {
+  background: rgba(0, 229, 255, 0.08) !important;
+  border-color: var(--accent) !important;
+}
+body.theme-dark .doc-tab.active::before { background: var(--accent) !important; }
+body.theme-dark .doc-tab .tab-label { color: var(--text) !important; }
+
+body.theme-dark .audit-title { color: var(--accent) !important; }
+body.theme-dark .audit-subtitle { color: var(--text-dim) !important; }
+
+body.theme-dark .menu-btn { color: var(--accent) !important; }
+body.theme-dark .menu-btn .btn-subtitle { color: var(--text-dim) !important; }
+body.theme-dark .back-link { color: var(--text-dim) !important; }
+body.theme-dark .back-link:hover { color: var(--accent) !important; }
+
+body.theme-dark .topbar-right { color: var(--text-dim) !important; }
+body.theme-dark .status-dot {
+  background: var(--accent) !important;
+  box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.2) !important;
+}
+
+/* =========================================================
+   ИСПРАВЛЕНИЯ ДЛЯ КОНКРЕТНЫХ ЭЛЕМЕНТОВ (по скриншотам)
+   ========================================================= */
+
+/* 1. Исправление кнопки "Вернуться в главное меню" */
+body.theme-dark button.back-btn {
+  background: transparent !important;
+  color: var(--text-dim) !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 8px 0 !important;
+  margin-bottom: 20px !important;
+}
+body.theme-dark button.back-btn:hover {
+  color: var(--accent) !important;
+  transform: translateX(-4px);
+}
+
+/* 2. Исправление заголовков блоков (1. ПРОВЕРКА ДОКУМЕНТОВ) */
+body.theme-dark .block-title {
+  background: linear-gradient(90deg, #00566b 0%, rgba(0, 229, 255, 0) 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--border-soft) !important;
+  border-left: 4px solid var(--accent) !important;
+  box-shadow: none !important;
+  border-radius: 4px !important;
+}
+
+/* 3. Исправление карточек меню (Вопросы для собеседований / Лекции для интернов) */
+body.theme-dark .menu-btn {
+  background: var(--panel) !important;
+  border: 1px solid var(--border) !important;
+  border-top: 4px solid var(--accent) !important;
+  border-radius: 8px !important;
+  box-shadow: var(--shadow-sm) !important;
+  color: var(--text) !important;
+}
+
+body.theme-dark .menu-btn.special {
+  border-top-color: var(--teal) !important;
+}
+
+body.theme-dark .menu-btn:hover {
+  background: var(--panel-soft) !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.2) !important;
+  transform: translateY(-3px);
+}
+
+body.theme-dark .menu-btn .btn-title {
+  color: var(--accent) !important;
+}
+
+body.theme-dark .menu-btn.special .btn-title {
+  color: var(--teal) !important;
+}
+
+body.theme-dark .menu-btn .btn-subtitle {
+  color: var(--text-dim) !important;
+}
+
+/* =========================================================
+   ПЛАВНЫЕ ПЕРЕХОДЫ ПРИ СМЕНЕ ТЕМЫ
+   ========================================================= */
+body {
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+.portal-card,
+.page-content,
+.doc-block,
+.doc-tab,
+.topbar,
+.ems-header,
+.ems-footer,
+.patient-fields,
+.question,
+.audit-card,
+.menu-btn,
+.modal-content,
+label.answer,
+input,
+button {
+  transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* =========================================================
+   КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ
+   ========================================================= */
+.theme-toggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center; 
+  position: relative;
+  overflow: hidden;
+}
+
+/* Состояние при наведении в светлой теме */
+body.theme-light .theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: rotate(20deg);
+}
+
+.theme-toggle .theme-icon-light,
+.theme-toggle .theme-icon-dark {
+  grid-area: 1 / 1;
+  font-size: 20px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+body.theme-light .theme-icon-light { opacity: 1; transform: scale(1); }
+body.theme-light .theme-icon-dark  { opacity: 0; transform: scale(0.5); }
+body.theme-dark  .theme-icon-light { opacity: 0; transform: scale(0.5); }
+body.theme-dark  .theme-icon-dark  { opacity: 1; transform: scale(1); }
+
+/* СПЕЦИАЛЬНО ДЛЯ ТЁМНОЙ ТЕМЫ (как на 2 скрине) */
+body.theme-dark .theme-toggle {
+  background: var(--accent) !important;
+  border-color: var(--accent) !important;
+  color: #000000 !important;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.4) !important;
+}
+
+body.theme-dark .theme-toggle:hover {
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: 0 0 25px rgba(0, 229, 255, 0.8) !important;
+  transform: rotate(20deg);
+}
+
+@media (max-width: 700px) {
+  .theme-toggle { width: 36px; height: 36px; font-size: 17px; }
+}
